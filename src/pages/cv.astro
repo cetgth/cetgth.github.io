@@ -1,0 +1,78 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { site } from "../config";
+import { url } from "../utils/url";
+---
+
+<BaseLayout title="CV" description="Curriculum vitae.">
+  <div class="prose-measure longform">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h1 class="text-3xl">Curriculum Vitae</h1>
+      <a class="btn btn-accent" href={url(site.cvPdf)} download>
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v12m0 0 4-4m-4 4-4-4"></path>
+          <path d="M5 21h14"></path>
+        </svg>
+        Download PDF
+      </a>
+    </div>
+    <p class="muted mt-2 text-sm">
+      Last updated June 2026 · the PDF is the authoritative version.
+    </p>
+
+    <h2>Education</h2>
+    <ul>
+      <li>
+        <strong>PhD, Brain & Cognitive Sciences</strong> — Example University
+        (2026–present)
+      </li>
+      <li><strong>MSc, Neuroscience</strong> — Example University (2024–2026)</li>
+      <li><strong>BSc, [Field]</strong> — Example University (2020–2024)</li>
+    </ul>
+
+    <h2>Research experience</h2>
+    <ul>
+      <li>
+        <strong>Graduate Researcher</strong>, {site.affiliation.lab} (2026–present)
+        — EEG decoding of musical imagery and production.
+      </li>
+      <li>
+        <strong>Research Assistant</strong>, [Lab] (2023–2024) — Lorem ipsum
+        dolor sit amet.
+      </li>
+    </ul>
+
+    <h2>Publications</h2>
+    <p>
+      See the <a href={url("publications")}>full publication list</a>. Selected:
+    </p>
+    <ul>
+      <li>
+        <strong>Lastname, F.</strong>, et al. (2025). Decoding melodic contour
+        from EEG across listening, imagery, and production. <em>NeuroImage</em>.
+      </li>
+    </ul>
+
+    <h2>Talks & Posters</h2>
+    <ul>
+      <li><strong>2026</strong> — Poster, Society for Neuroscience (SfN).</li>
+      <li><strong>2024</strong> — Talk, Cognitive Computational Neuroscience (CCN).</li>
+    </ul>
+
+    <h2>Teaching</h2>
+    <ul>
+      <li><strong>2025</strong> — TA, Introduction to Computational Neuroscience.</li>
+    </ul>
+
+    <h2>Awards & Honors</h2>
+    <ul>
+      <li><strong>2026</strong> — Graduate Fellowship, Example Foundation.</li>
+    </ul>
+
+    <h2>Service</h2>
+    <ul>
+      <li>Reviewer — Journal of Neuroscience, NeuroImage.</li>
+      <li>Organizer — [Workshop / reading group].</li>
+    </ul>
+  </div>
+</BaseLayout>

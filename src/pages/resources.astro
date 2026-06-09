@@ -1,0 +1,100 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+// Edit these arrays to list your repos / datasets / tools.
+const repos = [
+  {
+    name: "eeg-contour",
+    desc: "EEG melodic-contour decoding pipeline (MNE-Python + scikit-learn).",
+    href: "https://github.com/USERNAME/eeg-contour",
+    lang: "Python",
+  },
+  {
+    name: "music-bci-rt",
+    desc: "Real-time music-imagery BCI prototype and calibration utilities.",
+    href: "https://github.com/USERNAME/music-bci-rt",
+    lang: "Python",
+  },
+];
+
+const datasets = [
+  {
+    name: "Contour-EEG (placeholder)",
+    desc: "64-ch EEG during melodic listening/imagery/production. N=20.",
+    href: "https://openneuro.org/",
+  },
+];
+
+const tools = [
+  {
+    name: "contourkit",
+    desc: "Small toolbox for representing and scoring melodic contours.",
+    href: "https://github.com/USERNAME/contourkit",
+  },
+];
+---
+
+<BaseLayout title="Resources" description="Code, data, and tools.">
+  <header class="prose-measure">
+    <h1 class="text-3xl">Code & Data</h1>
+    <p class="muted mt-2">
+      Open-source code, public datasets, and tools from my research.
+    </p>
+  </header>
+
+  <section class="mt-8">
+    <h2 class="text-lg">Repositories</h2>
+    <div class="mt-4 grid gap-4 sm:grid-cols-2">
+      {
+        repos.map((r) => (
+          <a
+            class="card block no-underline"
+            href={r.href}
+            target="_blank"
+            rel="noopener"
+          >
+            <div class="flex items-center justify-between">
+              <span class="font-mono font-semibold" style="color: var(--fg);">
+                {r.name}
+              </span>
+              <span class="tag">{r.lang}</span>
+            </div>
+            <p class="muted mt-2 text-sm">{r.desc}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="mt-10">
+    <h2 class="text-lg">Datasets</h2>
+    <ul class="mt-4 space-y-3">
+      {
+        datasets.map((d) => (
+          <li class="prose-measure">
+            <a href={d.href} target="_blank" rel="noopener">
+              {d.name}
+            </a>
+            <span class="muted"> — {d.desc}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="mt-10">
+    <h2 class="text-lg">Software / Toolboxes</h2>
+    <ul class="mt-4 space-y-3">
+      {
+        tools.map((t) => (
+          <li class="prose-measure">
+            <a href={t.href} target="_blank" rel="noopener">
+              {t.name}
+            </a>
+            <span class="muted"> — {t.desc}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>

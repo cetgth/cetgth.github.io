@@ -1,0 +1,19 @@
+---
+import { site } from "../config";
+import SocialLinks from "./SocialLinks.astro";
+---
+
+<footer class="border-t" style="border-color: var(--border);">
+  <div
+    class="shell flex flex-col gap-4 py-8 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <SocialLinks size="sm" />
+    <p class="muted text-xs">
+      © {site.name.en}. Built with <a
+        href="https://astro.build"
+        rel="noopener"
+        target="_blank">Astro</a
+      >.
+    </p>
+  </div>
+</footer>

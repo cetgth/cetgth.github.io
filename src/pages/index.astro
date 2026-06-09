@@ -1,0 +1,87 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SocialLinks from "../components/SocialLinks.astro";
+import { site } from "../config";
+import { url } from "../utils/url";
+
+const news = (await getCollection("news"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 5);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="grid gap-8 sm:grid-cols-[200px_1fr] sm:gap-10">
+    <div class="shrink-0">
+      <img
+        src={url(site.photo)}
+        alt={site.name.en}
+        width="200"
+        height="200"
+        loading="eager"
+        class="h-40 w-40 rounded-2xl object-cover sm:h-48 sm:w-48"
+        style="border: 1px solid var(--border);"
+      />
+    </div>
+
+    <div class="prose-measure">
+      <h1 class="text-3xl sm:text-4xl">
+        {site.name.en}
+        <span class="muted ml-2 align-middle text-lg font-normal"
+          >{site.name.ko}</span
+        >
+      </h1>
+      <p class="muted mt-1 text-base">
+        {site.position} · {site.affiliation.lab}<br />
+        {site.affiliation.department}, {site.affiliation.university}
+      </p>
+
+      {site.bio.map((p) => <p class="mt-4">{p}</p>)}
+
+      <p class="mt-4">
+        <span class="font-semibold">I'm interested in</span>
+        {" "}{site.interests}.
+      </p>
+
+      <div class="mt-5">
+        <SocialLinks />
+      </div>
+    </div>
+  </section>
+
+  <!-- News -->
+  <section class="mt-14 prose-measure">
+    <h2 class="text-xl">News</h2>
+    <ul class="mt-4 space-y-3">
+      {
+        news.map((item) => (
+          <li class="flex flex-col gap-0.5 sm:flex-row sm:gap-4">
+            <time
+              datetime={item.data.date.toISOString()}
+              class="muted shrink-0 font-mono text-sm sm:w-28"
+            >
+              {fmt(item.data.date)}
+            </time>
+            <span>
+              {item.data.link ? (
+                <a href={item.data.link} target="_blank" rel="noopener">
+                  {item.data.title}
+                </a>
+              ) : (
+                item.data.title
+              )}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>

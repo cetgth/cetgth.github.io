@@ -1,0 +1,84 @@
+---
+import { site } from "../config";
+
+interface Props {
+  size?: "sm" | "md";
+}
+const { size = "md" } = Astro.props;
+const cls = size === "sm" ? "h-4 w-4" : "h-5 w-5";
+
+const email = site.links.email ?? "";
+const [emailUser, emailDomain] = email.includes("@")
+  ? email.split("@")
+  : ["", ""];
+
+const items = [
+  { key: "github", href: site.links.github, label: "GitHub" },
+  { key: "scholar", href: site.links.scholar, label: "Google Scholar" },
+  { key: "orcid", href: site.links.orcid, label: "ORCID" },
+  { key: "twitter", href: site.links.twitter, label: "Twitter / X" },
+].filter((i) => i.href && i.href.length > 0);
+---
+
+<div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+  {
+    email && (
+      <a
+        class="js-email muted inline-flex items-center gap-1.5 no-underline hover:text-[color:var(--fg)]"
+        data-user={emailUser}
+        data-domain={emailDomain}
+        href="#"
+        aria-label="Email"
+      >
+        <svg class={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="4" width="20" height="16" rx="2" />
+          <path d="m22 7-10 6L2 7" />
+        </svg>
+        <span>{emailUser} [at] {emailDomain}</span>
+      </a>
+    )
+  }
+  {
+    items.map((i) => (
+      <a
+        class="muted inline-flex items-center gap-1.5 no-underline hover:text-[color:var(--fg)]"
+        href={i.href}
+        target="_blank"
+        rel="me noopener"
+        aria-label={i.label}
+      >
+        {i.key === "github" && (
+          <svg class={cls} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.3-1.8-1.3-1.8-1.1-.7 0-.7 0-.7 1.2 0 1.9 1.2 1.9 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.2-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 5 18 5c.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5Z" />
+          </svg>
+        )}
+        {i.key === "scholar" && (
+          <svg class={cls} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 3 1 9l11 6 9-4.9V17h2V9L12 3Z" />
+            <path d="M6 13.4V17c0 1.7 2.7 3 6 3s6-1.3 6-3v-3.6l-6 3.3-6-3.3Z" />
+          </svg>
+        )}
+        {i.key === "orcid" && (
+          <svg class={cls} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0a12 12 0 1 0 0 24 12 12 0 0 0 0-24ZM8.1 18.6H6.3V8.9h1.8v9.7ZM7.2 7.6a1.05 1.05 0 1 1 0-2.1 1.05 1.05 0 0 1 0 2.1Zm11 11h-3.4c-3.1 0-4.5-2.2-4.5-4.8 0-2.9 1.8-4.9 4.7-4.9h3.2v1.6h-3c-2 0-2.9 1.4-2.9 3.3 0 2 1.2 3.2 3 3.2h1.3V11h1.8v7.6Z" />
+          </svg>
+        )}
+        {i.key === "twitter" && (
+          <svg class={cls} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M18.9 2H22l-7.5 8.6L23 22h-6.8l-5.3-7-6.1 7H1.7l8-9.2L1 2h7l4.8 6.4L18.9 2Zm-1.2 18h1.7L7.4 3.8H5.6L17.7 20Z" />
+          </svg>
+        )}
+        <span>{i.label}</span>
+      </a>
+    ))
+  }
+</div>
+
+<script is:inline>
+  // De-obfuscate email only in the browser (basic anti-scrape).
+  document.querySelectorAll(".js-email").forEach((a) => {
+    const u = a.getAttribute("data-user");
+    const d = a.getAttribute("data-domain");
+    if (u && d) a.setAttribute("href", "mailto:" + u + "@" + d);
+  });
+</script>

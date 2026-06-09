@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SocialLinks from "../components/SocialLinks.astro";
+import { site } from "../config";
+---
+
+<BaseLayout title="Contact" description="Get in touch.">
+  <div class="prose-measure">
+    <h1 class="text-3xl">Contact</h1>
+
+    <p class="mt-4">{site.contact.message}</p>
+
+    <div class="card mt-6">
+      <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
+        <dt class="muted">Email</dt>
+        <dd>
+          <SocialLinks size="sm" />
+        </dd>
+        <dt class="muted">Office</dt>
+        <dd>{site.contact.office}</dd>
+        <dt class="muted">Address</dt>
+        <dd>
+          {site.affiliation.university}<br />
+          {site.contact.address}
+        </dd>
+      </dl>
+    </div>
+
+    <p class="muted mt-6 text-sm">
+      Attending a conference? I'd be glad to meet up — drop me an email.
+    </p>
+  </div>
+</BaseLayout>

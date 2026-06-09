@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Figure placeholder">
+  <rect width="640" height="360" fill="#eef2ff"/>
+  <polyline points="40,300 120,180 200,240 280,90 360,200 440,120 520,260 600,150"
+    fill="none" stroke="#1e3a8a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="320" y="340" font-family="Inter, sans-serif" font-size="18" text-anchor="middle" fill="#1e3a8a">key figure — melodic contour</text>
+</svg>

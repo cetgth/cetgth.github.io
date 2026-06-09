@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design tokens ────────────────────────────────────────────────────────── */
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f7f7f8;
+  --fg: #18181b;
+  --fg-muted: #52525b;
+  --border: #e4e4e7;
+  --accent: #1e3a8a;
+  --accent-fg: #ffffff;
+}
+
+html.dark {
+  --bg: #0f1115;
+  --bg-soft: #171a21;
+  --fg: #e7e7ea;
+  --fg-muted: #a1a1aa;
+  --border: #2a2e37;
+  --accent: #93b4ff;
+  --accent-fg: #0f1115;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    font-family: theme("fontFamily.serif");
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--fg);
+  }
+  a {
+    color: var(--accent);
+    text-underline-offset: 2px;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  hr {
+    border-color: var(--border);
+  }
+}
+
+@layer components {
+  /* Page shell + readable measure */
+  .shell {
+    @apply mx-auto w-full max-w-wide px-5 sm:px-8;
+  }
+  .prose-measure {
+    max-width: theme("maxWidth.content");
+  }
+
+  /* Card */
+  .card {
+    background-color: var(--bg-soft);
+    border: 1px solid var(--border);
+    @apply rounded-xl p-5 transition-shadow;
+  }
+  .card:hover {
+    @apply shadow-sm;
+  }
+
+  /* Accent button / pill */
+  .btn {
+    @apply inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors;
+    border: 1px solid var(--border);
+    color: var(--fg);
+    background-color: var(--bg);
+  }
+  .btn:hover {
+    background-color: var(--bg-soft);
+    text-decoration: none;
+  }
+  .btn-accent {
+    background-color: var(--accent);
+    color: var(--accent-fg);
+    border-color: var(--accent);
+  }
+  .btn-accent:hover {
+    filter: brightness(1.08);
+    background-color: var(--accent);
+  }
+
+  .tag {
+    @apply inline-block rounded-full px-2.5 py-0.5 text-xs font-medium;
+    background-color: var(--bg-soft);
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+  }
+
+  .muted {
+    color: var(--fg-muted);
+  }
+
+  /* Long-form CV / markdown body */
+  .longform :where(h2) {
+    @apply mt-10 mb-3 text-xl;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.35rem;
+  }
+  .longform :where(h3) {
+    @apply mt-6 mb-1 text-base font-semibold;
+  }
+  .longform :where(p) {
+    @apply my-3;
+  }
+  .longform :where(ul) {
+    @apply my-3 list-disc space-y-1 pl-5;
+  }
+}
+
+/* Publications: Selected/All toggle (purely CSS-driven) */
+.pub-list.show-selected [data-selected="false"] {
+  display: none;
+}
+
+/* Respect users who prefer no motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

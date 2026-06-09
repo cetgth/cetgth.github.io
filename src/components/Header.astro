@@ -1,0 +1,52 @@
+---
+import { site } from "../config";
+import { url, isActive } from "../utils/url";
+import ThemeToggle from "./ThemeToggle.astro";
+
+const nav = [
+  { label: "Home", href: "" },
+  { label: "Research", href: "research" },
+  { label: "Publications", href: "publications" },
+  { label: "CV", href: "cv" },
+  { label: "Resources", href: "resources" },
+  { label: "Contact", href: "contact" },
+];
+
+const here = Astro.url.pathname;
+---
+
+<header
+  class="sticky top-0 z-30 border-b backdrop-blur"
+  style="border-color: var(--border); background-color: color-mix(in srgb, var(--bg) 85%, transparent);"
+>
+  <div class="shell flex h-14 items-center justify-between gap-4">
+    <a
+      href={url("")}
+      class="font-serif text-base font-semibold no-underline"
+      style="color: var(--fg);"
+    >
+      {site.name.en}
+    </a>
+
+    <nav class="flex items-center gap-1 sm:gap-2">
+      {
+        nav.map((item) => (
+          <a
+            href={url(item.href)}
+            class:list={[
+              "rounded-md px-2.5 py-1.5 text-sm no-underline transition-colors",
+              isActive(here, item.href)
+                ? "font-semibold"
+                : "muted hover:text-[color:var(--fg)]",
+            ]}
+            style={isActive(here, item.href) ? "color: var(--accent);" : ""}
+            aria-current={isActive(here, item.href) ? "page" : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <span class="ml-1"><ThemeToggle /></span>
+    </nav>
+  </div>
+</header>
