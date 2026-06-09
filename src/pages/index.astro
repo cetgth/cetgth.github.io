@@ -74,6 +74,17 @@ const fmt = (d: Date) =>
             </a>
           )
         }
+        <button
+          id="play-melody"
+          class="btn"
+          type="button"
+          aria-label="Play a melodic contour"
+          aria-pressed="false"
+        >
+          <svg class="play-ico h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+          <svg class="pause-ico hidden h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"></path></svg>
+          <span class="play-txt">Play melody</span>
+        </button>
       </div>
     </div>
 
@@ -212,7 +223,8 @@ const fmt = (d: Date) =>
     </section>
   </div>
 
-  <!-- ── Interactive hero waveform (EEG / audio motif, mint) ──────────────── -->
+  <!-- ── Interactive hero: brain waves → melodic contour on a staff → EQ ──── -->
+  <!-- ▶ Play melody sonifies the contour with Web Audio (mint, music + BCI) -->
   <script is:inline>
     (() => {
       const c = document.getElementById("hero-canvas");
@@ -221,12 +233,16 @@ const fmt = (d: Date) =>
       const hero = c.closest(".hero");
       const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
       let w = 0, h = 0, dpr = 1;
-      const mouse = { x: 0.7, y: 0.5, active: false };
+      const mouse = { x: 0.6, y: 0.5, active: false };
+      const state = { playIndex: -1 };
 
-      const accent = () =>
-        getComputedStyle(document.documentElement)
-          .getPropertyValue("--accent-bright")
-          .trim() || "#2dd4bf";
+      // A rising/falling melodic contour (semitone offsets from C).
+      const MELODY = [0, 4, 7, 9, 7, 12, 9, 5, 7, 4, 2, 0];
+
+      const css = (v, f) =>
+        getComputedStyle(document.documentElement).getPropertyValue(v).trim() || f;
+      const accent = () => css("--accent-bright", "#2dd4bf");
+      const accentDeep = () => css("--accent", "#0d9488");
 
       function resize() {
         dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -238,7 +254,6 @@ const fmt = (d: Date) =>
       }
       resize();
       window.addEventListener("resize", resize);
-
       hero.addEventListener("pointermove", (e) => {
         const r = hero.getBoundingClientRect();
         mouse.x = (e.clientX - r.left) / r.width;
@@ -247,44 +262,127 @@ const fmt = (d: Date) =>
       });
       hero.addEventListener("pointerleave", () => (mouse.active = false));
 
-      const BANDS = 6;
+      function notes() {
+        const n = MELODY.length, x0 = w * 0.16, span = w * 0.68;
+        const staffY = h * 0.2;
+        const spacing = Math.max(7, Math.min(12, h * 0.016));
+        const pts = MELODY.map((off, i) => ({
+          x: x0 + span * (i / (n - 1)),
+          y: staffY + spacing * 1.5 - (off / 12) * spacing * 5,
+          off, i,
+        }));
+        return { pts, staffY, spacing };
+      }
+
       function draw(t) {
         ctx.clearRect(0, 0, w, h);
-        const col = accent();
-        for (let b = 0; b < BANDS; b++) {
-          const baseY = h * (0.16 + (b / (BANDS - 1)) * 0.68);
-          const amp = (12 + b * 6) * (mouse.active ? 0.5 + mouse.y * 1.3 : 1);
-          const freq = 0.006 + b * 0.0015;
-          const speed = 0.0009 * (1 + b * 0.25) * (mouse.active ? 0.5 + mouse.x * 1.7 : 1);
+        const col = accent(), colD = accentDeep();
+        const amp = mouse.active ? 0.6 + mouse.y * 1.0 : 1;
+
+        // 1) faint neural waves (top)
+        for (let b = 0; b < 3; b++) {
+          const baseY = h * (0.13 + b * 0.07);
+          const a2 = (8 + b * 5) * amp, freq = 0.006 + b * 0.0016;
+          const sp = 0.0008 * (1 + b * 0.3) * (mouse.active ? 0.6 + mouse.x * 1.4 : 1);
           ctx.beginPath();
-          for (let x = 0; x <= w; x += 6) {
-            const y =
-              baseY +
-              Math.sin(x * freq + t * speed + b) * amp +
-              Math.sin(x * freq * 2.3 + t * speed * 1.4) * amp * 0.35;
+          for (let x = 0; x <= w; x += 8) {
+            const y = baseY + Math.sin(x * freq + t * sp + b) * a2 + Math.sin(x * freq * 2.2 + t * sp * 1.3) * a2 * 0.35;
             x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
           }
-          ctx.strokeStyle = col;
-          ctx.globalAlpha = 0.07 + b * 0.05;
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
+          ctx.strokeStyle = col; ctx.globalAlpha = 0.05 + b * 0.03; ctx.lineWidth = 1.4; ctx.stroke();
+        }
+
+        // 2) musical staff (5 lines) + melodic contour + note-heads
+        const { pts, staffY, spacing } = notes();
+        ctx.globalAlpha = 0.13; ctx.strokeStyle = colD; ctx.lineWidth = 1;
+        for (let l = -2; l <= 2; l++) {
+          const y = staffY + l * spacing;
+          ctx.beginPath(); ctx.moveTo(w * 0.12, y); ctx.lineTo(w * 0.88, y); ctx.stroke();
+        }
+        const bob = Math.sin(t * 0.0016) * spacing * 0.5 * amp;
+        ctx.globalAlpha = 0.5; ctx.strokeStyle = col; ctx.lineWidth = 2;
+        ctx.beginPath();
+        pts.forEach((p, i) => {
+          const y = p.y + bob * Math.sin(i * 0.7);
+          i === 0 ? ctx.moveTo(p.x, y) : ctx.lineTo(p.x, y);
+        });
+        ctx.stroke();
+        pts.forEach((p, i) => {
+          const y = p.y + bob * Math.sin(i * 0.7);
+          const active = state.playIndex === i;
+          if (active) {
+            ctx.globalAlpha = 0.28; ctx.fillStyle = col;
+            ctx.beginPath(); ctx.arc(p.x, y, 14, 0, Math.PI * 2); ctx.fill();
+          }
+          ctx.globalAlpha = active ? 0.95 : 0.62;
+          ctx.fillStyle = active ? col : colD;
+          ctx.beginPath(); ctx.ellipse(p.x, y, active ? 7 : 5, active ? 5.5 : 4, -0.4, 0, Math.PI * 2); ctx.fill();
+        });
+
+        // 3) subtle EQ bars at the very bottom
+        const bars = 30, bw = (w * 0.7) / bars, bx = w * 0.15, by = h * 0.93;
+        ctx.globalAlpha = 0.16; ctx.fillStyle = col;
+        for (let i = 0; i < bars; i++) {
+          const hgt = (6 + (Math.sin(t * 0.004 + i * 0.5) * 0.5 + 0.5) * 26) * amp;
+          ctx.fillRect(bx + i * bw, by - hgt, bw * 0.5, hgt);
         }
         ctx.globalAlpha = 1;
       }
 
-      if (reduce) { draw(0); return; }
       let raf, t0 = null, running = true;
       function loop(ts) {
         if (t0 === null) t0 = ts;
         draw(ts - t0);
-        if (running) raf = requestAnimationFrame(loop);
+        if (running && !reduce) raf = requestAnimationFrame(loop);
       }
-      raf = requestAnimationFrame(loop);
+      if (reduce) draw(0);
+      else raf = requestAnimationFrame(loop);
       document.addEventListener("visibilitychange", () => {
+        if (reduce) return;
         running = !document.hidden;
         if (running) raf = requestAnimationFrame(loop);
         else cancelAnimationFrame(raf);
       });
+
+      // ── Web Audio: play the melodic contour ───────────────────────────────
+      const btn = document.getElementById("play-melody");
+      let actx = null, playing = false, timer = null, idx = 0;
+      const FREQ = MELODY.map((s) => 261.63 * Math.pow(2, s / 12));
+      function noteOn(f, dur) {
+        const o = actx.createOscillator(), g = actx.createGain();
+        o.type = "triangle"; o.frequency.value = f;
+        const t = actx.currentTime;
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.linearRampToValueAtTime(0.16, t + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0008, t + dur);
+        o.connect(g).connect(actx.destination);
+        o.start(t); o.stop(t + dur + 0.03);
+      }
+      function ui(p) {
+        btn.querySelector(".play-ico").classList.toggle("hidden", p);
+        btn.querySelector(".pause-ico").classList.toggle("hidden", !p);
+        btn.querySelector(".play-txt").textContent = p ? "Stop" : "Play melody";
+        btn.setAttribute("aria-pressed", p ? "true" : "false");
+      }
+      function stop() {
+        playing = false; clearInterval(timer); state.playIndex = -1;
+        if (reduce) draw(0); ui(false);
+      }
+      function start() {
+        if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+        actx.resume(); playing = true; idx = 0; ui(true);
+        const step = () => {
+          if (!playing) return;
+          const i = idx % MELODY.length;
+          noteOn(FREQ[i], 0.22);
+          state.playIndex = i;
+          if (reduce) draw(0);
+          idx++;
+        };
+        step();
+        timer = setInterval(step, 250);
+      }
+      btn && btn.addEventListener("click", () => (playing ? stop() : start()));
     })();
   </script>
 </BaseLayout>
