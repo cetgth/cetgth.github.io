@@ -15,19 +15,17 @@ export default {
         },
       },
       fontFamily: {
-        // Rounded, friendly type. Body = Nunito; Headings = Fredoka; Korean = Jua.
+        // Rounded but understated. One family (Nunito) for body + headings.
         sans: [
           "Nunito",
-          "Jua",
           "Noto Sans KR",
           "ui-sans-serif",
           "system-ui",
           "sans-serif",
         ],
-        // "serif" slot is reused for the rounded display font (headings/name).
+        // "serif" slot = headings/name (same rounded family, heavier weight).
         serif: [
-          "Fredoka",
-          "Jua",
+          "Nunito",
           "Noto Sans KR",
           "ui-sans-serif",
           "system-ui",

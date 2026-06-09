@@ -219,8 +219,8 @@ html.dark {
   top: 0;
   left: 0;
   will-change: transform;
-  filter: drop-shadow(0 5px 9px rgba(13, 148, 136, 0.14));
-  opacity: 0.9;
+  filter: drop-shadow(0 4px 7px rgba(13, 148, 136, 0.08));
+  opacity: 0.55;
 }
 .note-glyph svg {
   display: block;

@@ -231,10 +231,7 @@ const fmt = (d: Date) =>
       const hero = field.closest(".hero");
       const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      const PASTELS = [
-        "#5eead4", "#99f6e4", "#a7f3d0", "#bae6fd",
-        "#c7d2fe", "#ddd6fe", "#fbcfe8", "#fde68a", "#a5f3fc",
-      ];
+      const PASTELS = ["#0d9488", "#14b8a6", "#2dd4bf", "#5eead4", "#99f6e4"];
       const TYPES = ["eighth", "eighth", "eighth", "beamed", "beamed", "quarter", "quarter", "quarter", "clef"];
 
       function glyphSVG(type, c, s) {
@@ -256,7 +253,7 @@ const fmt = (d: Date) =>
       measure();
       window.addEventListener("resize", measure);
 
-      const N = Math.max(10, Math.min(22, Math.round(window.innerWidth / 85)));
+      const N = Math.max(8, Math.min(15, Math.round(window.innerWidth / 115)));
       const rnd = (a, b) => a + Math.random() * (b - a);
       const MAX_CLEF = 2; // hard cap so treble clefs stay rare
       let clefCount = 0;
@@ -268,7 +265,7 @@ const fmt = (d: Date) =>
           else clefCount++;
         }
         const color = PASTELS[(Math.random() * PASTELS.length) | 0];
-        const size = rnd(22, 50);
+        const size = rnd(16, 34);
         const el = document.createElement("div");
         el.className = "note-glyph";
         el.innerHTML = glyphSVG(type, color, size);
