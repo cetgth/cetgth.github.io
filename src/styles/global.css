@@ -205,6 +205,25 @@ html.dark {
   z-index: 0;
   pointer-events: none;
 }
+/* Floating pastel music-glyph field */
+.notes-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.note-glyph {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+  filter: drop-shadow(0 5px 9px rgba(13, 148, 136, 0.14));
+  opacity: 0.9;
+}
+.note-glyph svg {
+  display: block;
+}
 .hero > .shell {
   position: relative;
   z-index: 1;

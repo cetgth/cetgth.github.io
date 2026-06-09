@@ -27,7 +27,7 @@ const fmt = (d: Date) =>
 <BaseLayout bleed>
   <!-- ── HERO (full-screen landing: name + simple intro only) ─────────────── -->
   <section class="hero relative">
-    <canvas id="hero-canvas" class="hero-canvas" aria-hidden="true"></canvas>
+    <div id="notes-field" class="notes-field" aria-hidden="true"></div>
 
     <div
       class="shell relative z-10 flex min-h-[calc(100dvh-3.5rem)] flex-col items-center justify-center py-20 text-center"
@@ -78,7 +78,7 @@ const fmt = (d: Date) =>
           id="play-melody"
           class="btn"
           type="button"
-          aria-label="Play a melodic contour"
+          aria-label="Play a short melody"
           aria-pressed="false"
         >
           <svg class="play-ico h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
@@ -223,131 +223,112 @@ const fmt = (d: Date) =>
     </section>
   </div>
 
-  <!-- ── Interactive hero: brain waves → melodic contour on a staff → EQ ──── -->
-  <!-- ▶ Play melody sonifies the contour with Web Audio (mint, music + BCI) -->
+  <!-- ── Floating pastel music glyphs (drift + mouse-repel) + playable melody ─ -->
   <script is:inline>
     (() => {
-      const c = document.getElementById("hero-canvas");
-      if (!c) return;
-      const ctx = c.getContext("2d");
-      const hero = c.closest(".hero");
+      const field = document.getElementById("notes-field");
+      if (!field) return;
+      const hero = field.closest(".hero");
       const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-      let w = 0, h = 0, dpr = 1;
-      const mouse = { x: 0.6, y: 0.5, active: false };
-      const state = { playIndex: -1 };
 
-      // A rising/falling melodic contour (semitone offsets from C).
-      const MELODY = [0, 4, 7, 9, 7, 12, 9, 5, 7, 4, 2, 0];
+      const PASTELS = [
+        "#5eead4", "#99f6e4", "#a7f3d0", "#bae6fd",
+        "#c7d2fe", "#ddd6fe", "#fbcfe8", "#fde68a", "#a5f3fc",
+      ];
+      const TYPES = ["eighth", "eighth", "beamed", "quarter", "clef"];
 
-      const css = (v, f) =>
-        getComputedStyle(document.documentElement).getPropertyValue(v).trim() || f;
-      const accent = () => css("--accent-bright", "#2dd4bf");
-      const accentDeep = () => css("--accent", "#0d9488");
-
-      function resize() {
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        const r = c.getBoundingClientRect();
-        w = r.width; h = r.height;
-        c.width = Math.round(w * dpr);
-        c.height = Math.round(h * dpr);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      function glyphSVG(type, c, s) {
+        if (type === "quarter")
+          return `<svg viewBox="0 0 30 50" width="${s}" height="${(s * 50) / 30}"><ellipse cx="11" cy="39" rx="8.5" ry="6.5" transform="rotate(-22 11 39)" fill="${c}"/><path d="M18.2 38 V9" fill="none" stroke="${c}" stroke-width="3.4" stroke-linecap="round"/></svg>`;
+        if (type === "eighth")
+          return `<svg viewBox="0 0 36 50" width="${s}" height="${(s * 50) / 36}"><ellipse cx="12" cy="39" rx="8.5" ry="6.5" transform="rotate(-22 12 39)" fill="${c}"/><path d="M19 38 V9" fill="none" stroke="${c}" stroke-width="3.4" stroke-linecap="round"/><path d="M19 9 c10 2 12 11 6 18" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round"/></svg>`;
+        if (type === "beamed")
+          return `<svg viewBox="0 0 50 50" width="${s * 1.3}" height="${(s * 50) / 50 * 1.3}"><ellipse cx="11" cy="40" rx="8" ry="6" transform="rotate(-22 11 40)" fill="${c}"/><ellipse cx="34" cy="40" rx="8" ry="6" transform="rotate(-22 34 40)" fill="${c}"/><path d="M18 40 V13" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round"/><path d="M41 40 V13" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round"/><path d="M17 14 H42" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round"/></svg>`;
+        // treble clef — real glyph from the Noto Music webfont
+        return `<span style="font-family:'Noto Music',serif;font-size:${(s * 1.9) | 0}px;line-height:1;color:${c};display:block;">𝄞</span>`;
       }
-      resize();
-      window.addEventListener("resize", resize);
+
+      let W = 0, H = 0;
+      const measure = () => {
+        const r = hero.getBoundingClientRect();
+        W = r.width; H = r.height;
+      };
+      measure();
+      window.addEventListener("resize", measure);
+
+      const N = Math.max(10, Math.min(22, Math.round(window.innerWidth / 85)));
+      const rnd = (a, b) => a + Math.random() * (b - a);
+      const glyphs = [];
+      for (let i = 0; i < N; i++) {
+        const type = TYPES[(Math.random() * TYPES.length) | 0];
+        const color = PASTELS[(Math.random() * PASTELS.length) | 0];
+        const size = rnd(22, 50);
+        const el = document.createElement("div");
+        el.className = "note-glyph";
+        el.innerHTML = glyphSVG(type, color, size);
+        field.appendChild(el);
+        const g = {
+          el,
+          x: rnd(0, W), y: rnd(0, H),
+          vx: rnd(-0.28, 0.28), vy: -rnd(0.12, 0.36),
+          rot: rnd(-22, 22), vr: rnd(-0.18, 0.18),
+          phase: rnd(0, Math.PI * 2), amp: rnd(5, 12),
+          pop: 0,
+        };
+        el.style.transform = `translate(${g.x}px, ${g.y}px) rotate(${g.rot}deg)`;
+        glyphs.push(g);
+      }
+
+      const mouse = { x: -9999, y: -9999, on: false };
       hero.addEventListener("pointermove", (e) => {
         const r = hero.getBoundingClientRect();
-        mouse.x = (e.clientX - r.left) / r.width;
-        mouse.y = (e.clientY - r.top) / r.height;
-        mouse.active = true;
+        mouse.x = e.clientX - r.left;
+        mouse.y = e.clientY - r.top;
+        mouse.on = true;
       });
-      hero.addEventListener("pointerleave", () => (mouse.active = false));
+      hero.addEventListener("pointerleave", () => {
+        mouse.on = false; mouse.x = -9999; mouse.y = -9999;
+      });
 
-      function notes() {
-        const n = MELODY.length, x0 = w * 0.16, span = w * 0.68;
-        const staffY = h * 0.2;
-        const spacing = Math.max(7, Math.min(12, h * 0.016));
-        const pts = MELODY.map((off, i) => ({
-          x: x0 + span * (i / (n - 1)),
-          y: staffY + spacing * 1.5 - (off / 12) * spacing * 5,
-          off, i,
-        }));
-        return { pts, staffY, spacing };
-      }
-
-      function draw(t) {
-        ctx.clearRect(0, 0, w, h);
-        const col = accent(), colD = accentDeep();
-        const amp = mouse.active ? 0.6 + mouse.y * 1.0 : 1;
-
-        // 1) faint neural waves (top)
-        for (let b = 0; b < 3; b++) {
-          const baseY = h * (0.13 + b * 0.07);
-          const a2 = (8 + b * 5) * amp, freq = 0.006 + b * 0.0016;
-          const sp = 0.0008 * (1 + b * 0.3) * (mouse.active ? 0.6 + mouse.x * 1.4 : 1);
-          ctx.beginPath();
-          for (let x = 0; x <= w; x += 8) {
-            const y = baseY + Math.sin(x * freq + t * sp + b) * a2 + Math.sin(x * freq * 2.2 + t * sp * 1.3) * a2 * 0.35;
-            x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      const R = 130;
+      function frame(t) {
+        for (const g of glyphs) {
+          g.x += g.vx;
+          g.y += g.vy;
+          g.rot += g.vr;
+          if (g.y < -70) { g.y = H + 50; g.x = rnd(0, W); }
+          if (g.x < -70) g.x = W + 50;
+          else if (g.x > W + 70) g.x = -50;
+          const bob = Math.sin(t * 0.001 + g.phase) * g.amp;
+          let ox = 0, oy = 0;
+          if (mouse.on) {
+            const dx = g.x - mouse.x, dy = g.y + bob - mouse.y;
+            const d = Math.hypot(dx, dy);
+            if (d < R && d > 0.01) {
+              const f = (R - d) / R, push = f * 40;
+              ox = (dx / d) * push; oy = (dy / d) * push;
+            }
           }
-          ctx.strokeStyle = col; ctx.globalAlpha = 0.05 + b * 0.03; ctx.lineWidth = 1.4; ctx.stroke();
+          g.pop *= 0.9;
+          const sc = 1 + g.pop;
+          g.el.style.transform = `translate(${g.x + ox}px, ${g.y + bob + oy}px) rotate(${g.rot}deg) scale(${sc})`;
         }
-
-        // 2) musical staff (5 lines) + melodic contour + note-heads
-        const { pts, staffY, spacing } = notes();
-        ctx.globalAlpha = 0.13; ctx.strokeStyle = colD; ctx.lineWidth = 1;
-        for (let l = -2; l <= 2; l++) {
-          const y = staffY + l * spacing;
-          ctx.beginPath(); ctx.moveTo(w * 0.12, y); ctx.lineTo(w * 0.88, y); ctx.stroke();
-        }
-        const bob = Math.sin(t * 0.0016) * spacing * 0.5 * amp;
-        ctx.globalAlpha = 0.5; ctx.strokeStyle = col; ctx.lineWidth = 2;
-        ctx.beginPath();
-        pts.forEach((p, i) => {
-          const y = p.y + bob * Math.sin(i * 0.7);
-          i === 0 ? ctx.moveTo(p.x, y) : ctx.lineTo(p.x, y);
-        });
-        ctx.stroke();
-        pts.forEach((p, i) => {
-          const y = p.y + bob * Math.sin(i * 0.7);
-          const active = state.playIndex === i;
-          if (active) {
-            ctx.globalAlpha = 0.28; ctx.fillStyle = col;
-            ctx.beginPath(); ctx.arc(p.x, y, 14, 0, Math.PI * 2); ctx.fill();
-          }
-          ctx.globalAlpha = active ? 0.95 : 0.62;
-          ctx.fillStyle = active ? col : colD;
-          ctx.beginPath(); ctx.ellipse(p.x, y, active ? 7 : 5, active ? 5.5 : 4, -0.4, 0, Math.PI * 2); ctx.fill();
-        });
-
-        // 3) subtle EQ bars at the very bottom
-        const bars = 30, bw = (w * 0.7) / bars, bx = w * 0.15, by = h * 0.93;
-        ctx.globalAlpha = 0.16; ctx.fillStyle = col;
-        for (let i = 0; i < bars; i++) {
-          const hgt = (6 + (Math.sin(t * 0.004 + i * 0.5) * 0.5 + 0.5) * 26) * amp;
-          ctx.fillRect(bx + i * bw, by - hgt, bw * 0.5, hgt);
-        }
-        ctx.globalAlpha = 1;
+        raf = requestAnimationFrame(frame);
       }
-
-      let raf, t0 = null, running = true;
-      function loop(ts) {
-        if (t0 === null) t0 = ts;
-        draw(ts - t0);
-        if (running && !reduce) raf = requestAnimationFrame(loop);
-      }
-      if (reduce) draw(0);
-      else raf = requestAnimationFrame(loop);
+      let raf, running = true;
+      if (!reduce) raf = requestAnimationFrame(frame);
       document.addEventListener("visibilitychange", () => {
         if (reduce) return;
         running = !document.hidden;
-        if (running) raf = requestAnimationFrame(loop);
+        if (running) raf = requestAnimationFrame(frame);
         else cancelAnimationFrame(raf);
       });
 
-      // ── Web Audio: play the melodic contour ───────────────────────────────
+      // ── Web Audio: play a short melody; each note pops a random glyph ──────
       const btn = document.getElementById("play-melody");
-      let actx = null, playing = false, timer = null, idx = 0;
+      const MELODY = [0, 4, 7, 9, 7, 12, 9, 5, 7, 4, 2, 0];
       const FREQ = MELODY.map((s) => 261.63 * Math.pow(2, s / 12));
+      let actx = null, playing = false, timer = null, idx = 0;
       function noteOn(f, dur) {
         const o = actx.createOscillator(), g = actx.createGain();
         o.type = "triangle"; o.frequency.value = f;
@@ -364,19 +345,15 @@ const fmt = (d: Date) =>
         btn.querySelector(".play-txt").textContent = p ? "Stop" : "Play melody";
         btn.setAttribute("aria-pressed", p ? "true" : "false");
       }
-      function stop() {
-        playing = false; clearInterval(timer); state.playIndex = -1;
-        if (reduce) draw(0); ui(false);
-      }
+      function stop() { playing = false; clearInterval(timer); ui(false); }
       function start() {
         if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
         actx.resume(); playing = true; idx = 0; ui(true);
         const step = () => {
           if (!playing) return;
-          const i = idx % MELODY.length;
-          noteOn(FREQ[i], 0.22);
-          state.playIndex = i;
-          if (reduce) draw(0);
+          noteOn(FREQ[idx % MELODY.length], 0.22);
+          const g = glyphs[(Math.random() * glyphs.length) | 0];
+          if (g) g.pop = 0.7;
           idx++;
         };
         step();
