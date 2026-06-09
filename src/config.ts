@@ -2,48 +2,48 @@
  * ────────────────────────────────────────────────────────────────────────────
  *  SITE CONFIG — single source of truth.
  *  Edit THIS file to update your name, links, and identity across the whole site.
- *  (Search the README "콘텐츠 추가 cheatsheet" for where everything lives.)
+ *  (See CONTENT_GUIDE.md for "무엇을 어디서 수정?")
  * ────────────────────────────────────────────────────────────────────────────
  */
 
 export interface SocialLinks {
   email?: string; // plain address; it is auto-obfuscated before rendering
   github?: string; // full URL
-  scholar?: string; // full URL
-  orcid?: string; // full URL
-  twitter?: string; // full URL (x.com/...)
+  scholar?: string; // full URL ("" = hide icon)
+  orcid?: string; // full URL ("" = hide icon)
+  twitter?: string; // full URL ("" = hide icon)
 }
 
 export const site = {
   /** Used for <title>, meta tags, and the deployed canonical URL. */
-  url: "https://USERNAME.github.io", // ← change to your GitHub Pages / custom domain
+  url: "https://cetgth.github.io", // user site (repo: cetgth.github.io)
 
   /** Your name. Korean is shown as a subtitle next to the English name. */
   name: {
-    en: "Firstname Lastname",
-    ko: "홍길동",
+    en: "Chae-Eun Yoon",
+    ko: "윤채은",
   },
 
   /** Surnames that should be rendered in bold in the author lists (you + aliases). */
-  selfSurnames: ["Lastname"],
+  selfSurnames: ["Yoon"],
 
   /** One-line role + affiliation, shown under your name on the home page. */
   position: "PhD Candidate",
   affiliation: {
-    lab: "Music & Neuroscience Lab",
-    department: "Department of Brain & Cognitive Sciences",
-    university: "Example University",
+    lab: "BCI Lab",
+    department: "Department of Biomedical Engineering",
+    university: "UNIST",
   },
 
   /** Short bio paragraph(s) on the home page. Each array item is a <p>. */
   bio: [
-    "I study how the brain represents and generates music. My work combines EEG/MEG decoding, brain–computer interfaces (BCI), and computational models of music imagery and production.",
-    "Before this, I trained in [field] at [place]. I care about open, reproducible neuroscience and tools that let people make music with their minds.",
+    "I am a PhD candidate in the BCI Lab at UNIST, studying how the brain represents and generates music. My research combines EEG decoding, brain–computer interfaces (BCI), and computational models of music imagery and production.",
+    "I'm interested in building BCIs that let people make and imagine music, and in open, reproducible neuroscience. (Replace this paragraph with your own bio.)",
   ],
 
   /** The "I'm interested in..." one-liner. */
   interests:
-    "Music Neuroscience · EEG/MEG decoding · Brain–Computer Interfaces · Music Imagery & Production",
+    "Music Neuroscience · EEG decoding · Brain–Computer Interfaces · Music Imagery & Production",
 
   /** Profile photo: drop a file in /public/images/ and point here (relative to /public). */
   photo: "images/profile.svg",
@@ -52,17 +52,17 @@ export const site = {
   cvPdf: "cv.pdf",
 
   links: {
-    email: "your@email.com",
-    github: "https://github.com/USERNAME",
-    scholar: "https://scholar.google.com/citations?user=XXXX",
-    orcid: "https://orcid.org/0000-0000-0000-0000",
+    email: "cetgth@unist.ac.kr",
+    github: "https://github.com/cetgth",
+    scholar: "", // ← paste your Google Scholar profile URL here later
+    orcid: "", // ← paste your ORCID URL (https://orcid.org/0000-...) or leave ""
     twitter: "", // leave "" to hide
   } as SocialLinks,
 
   /** Contact page details. */
   contact: {
-    office: "Room 000, Building Name",
-    address: "Example University, City, Country",
+    office: "BCI Lab, UNIST",
+    address: "UNIST, 50 UNIST-gil, Ulju-gun, Ulsan 44919, Republic of Korea",
     message:
       "I'm always happy to talk about music, brains, and BCIs. Feel free to reach out if you'd like to collaborate, are visiting a conference I'm at, or just want to chat.",
   },
