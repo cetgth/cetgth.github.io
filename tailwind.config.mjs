@@ -8,9 +8,10 @@ export default {
         // Single accent color. Swap the hex below to re-theme the whole site.
         // Suggested alternatives: forest green #064e3b, burgundy #7f1d1d.
         accent: {
-          DEFAULT: "#1e3a8a",
+          DEFAULT: "#14b8a6", // mint / teal
+          bright: "#2dd4bf",
+          strong: "#0f766e",
           fg: "#ffffff",
-          muted: "#3b5bb5",
         },
       },
       fontFamily: {

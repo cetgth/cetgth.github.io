@@ -4,7 +4,7 @@ summary: "Four-class contour decoding in a music BCI, with significant performan
 image: "images/research-1.svg"
 order: 1
 pub: "https://example.com/papers/lastname2025.pdf"
-pubLabel: "Lastname et al., 2025 (NeuroImage)"
+pubLabel: "Yoon et al., 2025 (NeuroImage)"
 tags: ["EEG", "decoding", "music imagery"]
 ---
 

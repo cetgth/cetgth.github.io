@@ -8,9 +8,11 @@ import { url } from "../utils/url";
 interface Props {
   title?: string;
   description?: string;
+  /** Home uses a full-bleed hero, so it opts out of the default shell padding. */
+  bleed?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, bleed = false } = Astro.props;
 const pageTitle = title ? `${title} · ${site.name.en}` : site.name.en;
 const desc =
   description ?? `${site.name.en} — ${site.position}, ${site.affiliation.lab}.`;
@@ -57,11 +59,47 @@ const desc =
       })();
     </script>
   </head>
-  <body class="min-h-screen flex flex-col">
+  <body class="min-h-screen flex flex-col overflow-x-hidden">
+    <div class="scroll-progress" id="scrollbar"></div>
     <Header />
-    <main class="shell w-full flex-1 py-10 sm:py-14">
+    <main class:list={["w-full flex-1", bleed ? "" : "shell py-10 sm:py-14"]}>
       <slot />
     </main>
     <Footer />
+
+    <!-- Global interactivity: scroll-reveal + scroll-progress bar -->
+    <script is:inline>
+      (() => {
+        const els = document.querySelectorAll(".reveal");
+        if (!("IntersectionObserver" in window)) {
+          els.forEach((e) => e.classList.add("in"));
+        } else {
+          const io = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((en) => {
+                if (en.isIntersecting) {
+                  en.target.classList.add("in");
+                  io.unobserve(en.target);
+                }
+              });
+            },
+            { rootMargin: "0px 0px -10% 0px", threshold: 0.08 },
+          );
+          els.forEach((e) => io.observe(e));
+        }
+
+        const bar = document.getElementById("scrollbar");
+        if (bar) {
+          const upd = () => {
+            const de = document.documentElement;
+            const max = de.scrollHeight - de.clientHeight || 1;
+            bar.style.width = Math.min(100, (de.scrollTop / max) * 100) + "%";
+          };
+          document.addEventListener("scroll", upd, { passive: true });
+          window.addEventListener("resize", upd);
+          upd();
+        }
+      })();
+    </script>
   </body>
 </html>

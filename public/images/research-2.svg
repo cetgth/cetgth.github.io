@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Figure placeholder">
-  <rect width="640" height="360" fill="#ecfdf5"/>
-  <circle cx="240" cy="170" r="90" fill="none" stroke="#064e3b" stroke-width="6"/>
-  <circle cx="400" cy="170" r="90" fill="none" stroke="#1e3a8a" stroke-width="6"/>
-  <text x="320" y="340" font-family="Inter, sans-serif" font-size="18" text-anchor="middle" fill="#064e3b">key figure — shared representations</text>
+  <rect width="640" height="360" fill="#effdfb"/>
+  <circle cx="250" cy="170" r="95" fill="#0d9488" fill-opacity="0.14" stroke="#0d9488" stroke-width="5"/>
+  <circle cx="390" cy="170" r="95" fill="#2dd4bf" fill-opacity="0.18" stroke="#14b8a6" stroke-width="5"/>
+  <text x="320" y="340" font-family="Inter, sans-serif" font-size="18" text-anchor="middle" fill="#0f766e">key figure — shared representations</text>
 </svg>

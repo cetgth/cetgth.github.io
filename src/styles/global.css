@@ -5,22 +5,26 @@
 /* ── Design tokens ────────────────────────────────────────────────────────── */
 :root {
   --bg: #ffffff;
-  --bg-soft: #f7f7f8;
-  --fg: #18181b;
-  --fg-muted: #52525b;
-  --border: #e4e4e7;
-  --accent: #1e3a8a;
+  --bg-soft: #f3fbf9;
+  --fg: #0e1716;
+  --fg-muted: #566866;
+  --border: #dcebe8;
+  --accent: #0d9488; /* teal-600 — links/text (readable) */
+  --accent-strong: #0f766e; /* button bg */
+  --accent-bright: #2dd4bf; /* mint — decoration/waveforms/glow */
   --accent-fg: #ffffff;
 }
 
 html.dark {
-  --bg: #0f1115;
-  --bg-soft: #171a21;
-  --fg: #e7e7ea;
-  --fg-muted: #a1a1aa;
-  --border: #2a2e37;
-  --accent: #93b4ff;
-  --accent-fg: #0f1115;
+  --bg: #07100f;
+  --bg-soft: #0e1a18;
+  --fg: #e7f3f0;
+  --fg-muted: #8ba39f;
+  --border: #1c2c29;
+  --accent: #5eead4; /* mint-300 on dark */
+  --accent-strong: #2dd4bf;
+  --accent-bright: #5eead4;
+  --accent-fg: #04211d;
 }
 
 @layer base {
@@ -127,9 +131,229 @@ html.dark {
   display: none;
 }
 
+/* ── Mint / Music-BCI theme + interactivity ───────────────────────────────── */
+@layer components {
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .kicker::before {
+    content: "";
+    width: 1.5rem;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+  }
+  .lead {
+    font-size: 1.18rem;
+    line-height: 1.6;
+    color: var(--fg);
+  }
+  .link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .link-arrow svg {
+    transition: transform 0.2s ease;
+  }
+  .link-arrow:hover svg {
+    transform: translateX(3px);
+  }
+}
+
+/* accent button → mint/teal */
+.btn-accent {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: var(--accent-fg);
+}
+.btn-accent:hover {
+  background: var(--accent-strong);
+  filter: brightness(1.08);
+}
+.btn {
+  border-radius: 0.6rem;
+  padding: 0.5rem 0.85rem;
+}
+
+/* Hero: animated mint field behind content */
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background:
+    radial-gradient(58% 80% at 86% -20%, color-mix(in srgb, var(--accent-bright) 32%, transparent), transparent 70%),
+    radial-gradient(46% 60% at 8% 115%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-bright) 8%, var(--bg)), var(--bg) 78%);
+}
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.hero > .shell {
+  position: relative;
+  z-index: 1;
+}
+
+/* Avatar with pulsing signal ring */
+.avatar {
+  position: relative;
+  width: fit-content;
+}
+.avatar img {
+  position: relative;
+  z-index: 1;
+}
+.avatar::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 1.35rem;
+  border: 2px solid color-mix(in srgb, var(--accent-bright) 75%, transparent);
+  z-index: 0;
+  animation: signal 2.8s ease-out infinite;
+}
+.avatar:hover::after {
+  animation-duration: 1.3s;
+}
+@keyframes signal {
+  0% { transform: scale(0.97); opacity: 0.8; }
+  70% { transform: scale(1.07); opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Gradient name */
+.name-grad {
+  background: linear-gradient(100deg, var(--fg) 28%, var(--accent) 68%, var(--accent-bright));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Card hover glow (mint) + media zoom */
+.card {
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--accent-bright) 55%, var(--border));
+  box-shadow: 0 18px 42px -22px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+.card-media {
+  position: relative;
+  overflow: hidden;
+}
+.card-media img {
+  transition: transform 0.45s ease;
+}
+.card:hover .card-media img {
+  transform: scale(1.05);
+}
+
+/* Animated underline link */
+.ulink {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+.ulink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+.ulink:hover {
+  text-decoration: none;
+}
+.ulink:hover::after {
+  transform: scaleX(1);
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Top scroll-progress bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  z-index: 60;
+  background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent-bright) 70%, transparent);
+}
+
+/* Pulsing signal dot (header brand) */
+.dot-pulse {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 9999px;
+  background: var(--accent-bright);
+  animation: dot 2s infinite;
+}
+@keyframes dot {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-bright) 60%, transparent); }
+  70% { box-shadow: 0 0 0 9px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* Scroll-down cue on the landing hero */
+.scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: 1.4rem;
+  transform: translateX(-50%);
+  z-index: 10;
+  color: var(--accent);
+  opacity: 0.85;
+  animation: bounce 1.9s infinite;
+}
+.scroll-cue:hover {
+  opacity: 1;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(9px); }
+}
+
 /* Respect users who prefer no motion */
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .avatar::after,
+  .dot-pulse,
+  .scroll-cue,
+  .card,
+  .card-media img { animation: none; transition: none; }
 }

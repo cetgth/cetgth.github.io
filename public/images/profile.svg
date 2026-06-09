@@ -1,13 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Profile photo placeholder">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Chae-Eun Yoon">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#1e3a8a"/>
-      <stop offset="1" stop-color="#3b5bb5"/>
+      <stop offset="0" stop-color="#0d9488"/>
+      <stop offset="0.55" stop-color="#14b8a6"/>
+      <stop offset="1" stop-color="#5eead4"/>
     </linearGradient>
+    <radialGradient id="glow" cx="0.72" cy="0.22" r="0.9">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.4"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
   </defs>
   <rect width="400" height="400" fill="url(#g)"/>
-  <circle cx="200" cy="155" r="68" fill="#ffffff" opacity="0.92"/>
-  <path d="M70 360c0-72 58-120 130-120s130 48 130 120z" fill="#ffffff" opacity="0.92"/>
-  <text x="200" y="392" font-family="Inter, sans-serif" font-size="20"
-        text-anchor="middle" fill="#ffffff" opacity="0.85">replace /public/images/profile</text>
+  <rect width="400" height="400" fill="url(#glow)"/>
+  <g fill="none" stroke="#ffffff" stroke-opacity="0.28" stroke-width="3" stroke-linecap="round">
+    <path d="M40 250 q35 -55 70 0 t70 0 t70 0 t70 0"/>
+    <path d="M40 300 q35 -45 70 0 t70 0 t70 0 t70 0"/>
+  </g>
+  <text x="200" y="208" font-family="'Source Serif 4', Georgia, serif" font-size="150"
+        font-weight="600" text-anchor="middle" fill="#ffffff">CY</text>
 </svg>

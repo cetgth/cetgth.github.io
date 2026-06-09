@@ -4,7 +4,7 @@ summary: "Quantifying production–imagery coupling: do the brain patterns that 
 image: "images/research-2.svg"
 order: 2
 pub: "https://example.com/ccn2024"
-pubLabel: "Lastname et al., 2024 (CCN)"
+pubLabel: "Yoon et al., 2024 (CCN)"
 tags: ["RSA", "imagery", "production"]
 ---
 

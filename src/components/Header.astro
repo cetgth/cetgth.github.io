@@ -22,9 +22,10 @@ const here = Astro.url.pathname;
   <div class="shell flex h-14 items-center justify-between gap-4">
     <a
       href={url("")}
-      class="font-serif text-base font-semibold no-underline"
+      class="inline-flex items-center gap-2.5 font-serif text-base font-semibold no-underline"
       style="color: var(--fg);"
     >
+      <span class="dot-pulse" aria-hidden="true"></span>
       {site.name.en}
     </a>
 
