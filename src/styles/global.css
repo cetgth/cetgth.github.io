@@ -35,6 +35,7 @@ html.dark {
   body {
     background-color: var(--bg);
     color: var(--fg);
+    font-family: theme("fontFamily.sans");
     font-size: 16px;
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
@@ -256,12 +257,9 @@ html.dark {
   100% { opacity: 0; }
 }
 
-/* Gradient name */
+/* Name — solid color (no gradient) */
 .name-grad {
-  background: linear-gradient(100deg, var(--fg) 28%, var(--accent) 68%, var(--accent-bright));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--fg);
 }
 
 /* Card hover glow (mint) + media zoom */

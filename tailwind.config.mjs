@@ -15,22 +15,23 @@ export default {
         },
       },
       fontFamily: {
-        // Body = humanist sans; Headings = serif. Korean falls back to Noto Sans KR.
+        // Rounded, friendly type. Body = Nunito; Headings = Fredoka; Korean = Jua.
         sans: [
-          "Inter",
-          "IBM Plex Sans",
+          "Nunito",
+          "Jua",
           "Noto Sans KR",
           "ui-sans-serif",
           "system-ui",
           "sans-serif",
         ],
+        // "serif" slot is reused for the rounded display font (headings/name).
         serif: [
-          "Source Serif 4",
-          "Lora",
-          "Noto Serif KR",
-          "ui-serif",
-          "Georgia",
-          "serif",
+          "Fredoka",
+          "Jua",
+          "Noto Sans KR",
+          "ui-sans-serif",
+          "system-ui",
+          "sans-serif",
         ],
       },
       maxWidth: {
