@@ -54,7 +54,7 @@ export const site = {
   links: {
     email: "cetgth@unist.ac.kr",
     github: "https://github.com/cetgth",
-    scholar: "", // ← paste your Google Scholar profile URL here later
+    scholar: "https://scholar.google.com/citations?user=zbd7DXoAAAAJ&hl=en",
     orcid: "", // ← paste your ORCID URL (https://orcid.org/0000-...) or leave ""
     twitter: "", // leave "" to hide
   } as SocialLinks,

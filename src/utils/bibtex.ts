@@ -67,6 +67,8 @@ function clean(v: string): string {
     .replace(/[{}]/g, "")
     .replace(/\\&/g, "&")
     .replace(/~/g, " ")
+    .replace(/---/g, "—")
+    .replace(/--/g, "–")
     .replace(/\s+/g, " ")
     .trim();
 }
