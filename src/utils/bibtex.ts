@@ -36,6 +36,7 @@ export interface Pub {
   code?: string;
   doi?: string;
   selected: boolean;
+  kind: string; // "paper" (default) | "poster" | "talk" | "presentation"
   hasEqual: boolean;
   raw: string; // original entry text, for the "copy BibTeX" button
 }
@@ -217,6 +218,7 @@ export function parseBibtex(
         code: f.code ? clean(f.code) : undefined,
         doi,
         selected: /^(true|yes|1)$/i.test(clean(f.selected || "")),
+        kind: f.kind ? clean(f.kind).toLowerCase() : "paper",
         hasEqual: authors.some((a) => a.equal),
         raw: e.raw,
       };

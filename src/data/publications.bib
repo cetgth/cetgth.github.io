@@ -1,9 +1,11 @@
 % ─────────────────────────────────────────────────────────────────────────────
-%  PUBLICATIONS — source of truth for the /publications page.
-%  Add a new entry by pasting a BibTeX block below. Custom fields you can use:
+%  PUBLICATIONS & PRESENTATIONS — source for the /publications page.
+%  Custom fields you can use:
+%     kind         = {paper}    → "Publications" section (default if omitted)
+%     kind         = {poster}   → "Presentations" section (also: talk, presentation)
 %     pdf          = {https://...}            link for the [PDF] button
 %     code         = {https://...}            link for the [Code] button
-%     selected     = {true}                   show in the "Highlights" view
+%     selected     = {true}                   show in the home "recent" preview
 %     equalcontrib = {Lastname, Coauthor}     mark † equal-contribution authors
 %  Your own surname (Yoon) is bolded automatically (configured in src/config.ts).
 % ─────────────────────────────────────────────────────────────────────────────
@@ -14,6 +16,7 @@
   booktitle = {2026 14th International Conference on Brain-Computer Interface (BCI)},
   pages     = {1--6},
   year      = {2026},
+  kind      = {paper},
   selected  = {true}
 }
 
@@ -22,6 +25,7 @@
   author    = {Yoon, Chae-Eun and Kim, Sung-Phil},
   booktitle = {Society for Neuroscience (SfN)},
   year      = {2025},
+  kind      = {poster},
   selected  = {true}
 }
 
@@ -30,5 +34,6 @@
   author    = {Yoon, Chae-Eun and Kim, Sung-Phil},
   booktitle = {International Society for Music Information Retrieval (ISMIR)},
   year      = {2025},
+  kind      = {poster},
   selected  = {true}
 }

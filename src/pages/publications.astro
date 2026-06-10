@@ -1,147 +1,52 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PubList from "../components/PubList.astro";
 import { site } from "../config";
 import { parseBibtex, groupByYear } from "../utils/bibtex";
 // Vite ?raw import → the .bib file content as a string (parsed at build time).
 import bibRaw from "../data/publications.bib?raw";
 
 const pubs = parseBibtex(bibRaw, { selfSurnames: [...site.selfSurnames] });
-const groups = groupByYear(pubs);
-
-function venueLine(p: (typeof pubs)[number]): string {
-  const bits: string[] = [];
-  if (p.venue) bits.push(p.venue);
-  const vn = [p.volume, p.number ? `(${p.number})` : ""].filter(Boolean).join("");
-  if (vn) bits.push(vn);
-  if (p.pages) bits.push(p.pages);
-  let s = bits.join(", ");
-  if (p.year) s += `${s ? " " : ""}(${p.year})`;
-  return s;
-}
+const isTalk = (k: string) => ["poster", "talk", "presentation"].includes(k);
+const papers = groupByYear(pubs.filter((p) => !isTalk(p.kind)));
+const talks = groupByYear(pubs.filter((p) => isTalk(p.kind)));
 ---
 
-<BaseLayout title="Publications" description="Publications and preprints.">
+<BaseLayout
+  title="Publications"
+  description="Publications and conference presentations."
+>
   <header class="prose-measure">
-    <h1 class="text-3xl">Publications</h1>
+    <h1 class="text-3xl">Publications &amp; Presentations</h1>
     <p class="muted mt-2">
-      <span class="font-semibold" style="color: var(--fg);"
-        >Bold</span
-      > = me. † = equal contribution. Use the toggle to see highlights or all work.
+      <span class="font-semibold" style="color: var(--fg);">Bold</span> = me. † =
+      equal contribution.
     </p>
-
-    <div
-      class="mt-4 inline-flex rounded-md p-0.5"
-      style="border: 1px solid var(--border);"
-      role="group"
-      aria-label="Publication view"
-    >
-      <button id="btn-selected" type="button" class="seg px-3 py-1 text-sm">
-        Highlights
-      </button>
-      <button id="btn-all" type="button" class="seg px-3 py-1 text-sm">
-        All
-      </button>
-    </div>
   </header>
 
-  <div id="pub-list" class="pub-list show-selected mt-8 space-y-10">
-    {
-      groups.map((g) => (
-        <section class="year-group prose-measure">
-          <h2 class="mb-3 font-mono text-sm tracking-wide muted">{g.year}</h2>
-          <ol class="space-y-5">
-            {g.items.map((p) => (
-              <li
-                data-selected={String(p.selected)}
-                class="border-l-2 pl-4"
-                style="border-color: var(--border);"
-              >
-                <p class="leading-snug">
-                  {p.authors.map((a, i) => (
-                    <>
-                      {i > 0 && ", "}
-                      {a.self ? (
-                        <strong style="color: var(--fg);">{a.display}</strong>
-                      ) : (
-                        a.display
-                      )}
-                      {a.equal && <sup>†</sup>}
-                    </>
-                  ))}
-                </p>
-                <p class="mt-1 font-medium" style="color: var(--fg);">
-                  {p.title}
-                </p>
-                <p class="muted mt-0.5 text-sm">
-                  <em>{venueLine(p)}</em>
-                  {p.note && <span> · {p.note}</span>}
-                </p>
-
-                <div class="mt-2 flex flex-wrap gap-2">
-                  {(p.pdf || p.url) && (
-                    <a class="btn" href={p.pdf ?? p.url} target="_blank" rel="noopener">
-                      PDF
-                    </a>
-                  )}
-                  {p.code && (
-                    <a class="btn" href={p.code} target="_blank" rel="noopener">
-                      Code
-                    </a>
-                  )}
-                  {p.doi && (
-                    <a
-                      class="btn"
-                      href={`https://doi.org/${p.doi}`}
-                      target="_blank"
-                      rel="noopener"
-                    >
-                      DOI
-                    </a>
-                  )}
-                  <button class="btn js-bib" type="button" data-bibtex={p.raw}>
-                    BibTeX
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
-      ))
-    }
-  </div>
-</BaseLayout>
-
-<style is:global>
-  /* Hide empty year groups when only selected pubs are shown. */
-  .pub-list.show-selected .year-group:not(:has([data-selected="true"])) {
-    display: none;
+  {
+    papers.length > 0 && (
+      <section class="mt-9">
+        <h2 class="prose-measure text-xl">Publications</h2>
+        <div class="mt-4">
+          <PubList groups={papers} />
+        </div>
+      </section>
+    )
   }
-  .seg {
-    border-radius: 0.3rem;
-    color: var(--fg-muted);
-    background: transparent;
-  }
-  .seg.active {
-    background: var(--accent);
-    color: var(--accent-fg);
-  }
-</style>
 
-<script is:inline>
-  (() => {
-    const list = document.getElementById("pub-list");
-    const bSel = document.getElementById("btn-selected");
-    const bAll = document.getElementById("btn-all");
-    function setMode(selected) {
-      list.classList.toggle("show-selected", selected);
-      bSel.classList.toggle("active", selected);
-      bAll.classList.toggle("active", !selected);
-    }
-    bSel?.addEventListener("click", () => setMode(true));
-    bAll?.addEventListener("click", () => setMode(false));
-    setMode(true);
+  {
+    talks.length > 0 && (
+      <section class="mt-12">
+        <h2 class="prose-measure text-xl">Presentations</h2>
+        <div class="mt-4">
+          <PubList groups={talks} />
+        </div>
+      </section>
+    )
+  }
 
-    // Copy-BibTeX buttons
+  <script is:inline>
     document.querySelectorAll(".js-bib").forEach((btn) => {
       btn.addEventListener("click", async () => {
         const text = btn.getAttribute("data-bibtex") || "";
@@ -155,5 +60,5 @@ function venueLine(p: (typeof pubs)[number]): string {
         }
       });
     });
-  })();
-</script>
+  </script>
+</BaseLayout>
