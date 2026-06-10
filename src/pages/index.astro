@@ -19,7 +19,7 @@ const selected = pubs.filter((p) => p.selected).slice(0, 3);
 
 const email = site.links.email ?? "";
 
-// Floating notes link to these menu tabs (base-aware URLs resolved here).
+// Fixed, labeled note-buttons → menu tabs (base-aware URLs).
 const navTargets = [
   { href: url("research"), label: "Research" },
   { href: url("publications"), label: "Publications" },
@@ -79,7 +79,24 @@ const fmt = (d: Date) =>
         }
       </div>
 
-      <p class="muted mt-5 text-xs">Tip: the floating notes link to each section ♪</p>
+      <!-- Fixed, labeled note-buttons → each goes to a menu tab -->
+      <nav
+        class="mt-6 flex flex-wrap items-center justify-center gap-2.5"
+        aria-label="Sections"
+      >
+        {
+          navTargets.map((t) => (
+            <a class="note-btn" href={t.href}>
+              <svg class="note-btn-ico" viewBox="0 0 24 32" fill="none" aria-hidden="true">
+                <ellipse cx="8" cy="25" rx="6" ry="4.5" transform="rotate(-20 8 25)" fill="currentColor" />
+                <path d="M13 24 V5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
+                <path d="M13 5 c7 1.5 8 7 4 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+              </svg>
+              <span>{t.label}</span>
+            </a>
+          ))
+        }
+      </nav>
     </div>
 
     <!-- scroll-down cue -->
@@ -217,11 +234,11 @@ const fmt = (d: Date) =>
     </section>
   </div>
 
-  <!-- ── Floating music glyphs: drift gently; each one links to a menu tab ─── -->
-  <script define:vars={{ navTargets }}>
+  <!-- ── Floating music glyphs — purely decorative (drift + bob) ───────────── -->
+  <script is:inline>
     (() => {
       const field = document.getElementById("notes-field");
-      if (!field || !navTargets.length) return;
+      if (!field) return;
       const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       const PALETTE = ["#0d9488", "#14b8a6", "#2dd4bf", "#5eead4", "#99f6e4"];
@@ -256,13 +273,9 @@ const fmt = (d: Date) =>
         }
         const color = PALETTE[(Math.random() * PALETTE.length) | 0];
         const size = rnd(16, 34);
-        const dest = navTargets[i % navTargets.length];
-        const el = document.createElement("a");
+        const el = document.createElement("div");
         el.className = "note-glyph";
-        el.href = dest.href;
-        el.tabIndex = -1;
-        el.setAttribute("aria-label", "Go to " + dest.label);
-        el.innerHTML = glyphSVG(type, color, size) + `<span class="note-label">${dest.label}</span>`;
+        el.innerHTML = glyphSVG(type, color, size);
         field.appendChild(el);
         const g = {
           el,
@@ -270,26 +283,19 @@ const fmt = (d: Date) =>
           vx: rnd(-0.24, 0.24), vy: -rnd(0.1, 0.3),
           rot: rnd(-18, 18), vr: rnd(-0.14, 0.14),
           phase: rnd(0, Math.PI * 2), amp: rnd(4, 10),
-          hover: false,
         };
-        el.addEventListener("pointerenter", () => (g.hover = true));
-        el.addEventListener("pointerleave", () => (g.hover = false));
         el.style.transform = `translate(${g.x}px, ${g.y}px) rotate(${g.rot}deg)`;
         glyphs.push(g);
       }
 
       function frame(t) {
         for (const g of glyphs) {
-          if (!g.hover) {
-            g.x += g.vx; g.y += g.vy; g.rot += g.vr;
-            if (g.y < -70) { g.y = H + 50; g.x = rnd(0, W); }
-            if (g.x < -70) g.x = W + 50;
-            else if (g.x > W + 70) g.x = -50;
-          }
-          const bob = g.hover ? 0 : Math.sin(t * 0.001 + g.phase) * g.amp;
-          const rot = g.hover ? 0 : g.rot;
-          const sc = g.hover ? 1.35 : 1;
-          g.el.style.transform = `translate(${g.x}px, ${g.y + bob}px) rotate(${rot}deg) scale(${sc})`;
+          g.x += g.vx; g.y += g.vy; g.rot += g.vr;
+          if (g.y < -70) { g.y = H + 50; g.x = rnd(0, W); }
+          if (g.x < -70) g.x = W + 50;
+          else if (g.x > W + 70) g.x = -50;
+          const bob = Math.sin(t * 0.001 + g.phase) * g.amp;
+          g.el.style.transform = `translate(${g.x}px, ${g.y + bob}px) rotate(${g.rot}deg)`;
         }
         raf = requestAnimationFrame(frame);
       }

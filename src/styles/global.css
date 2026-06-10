@@ -220,39 +220,41 @@ html.dark {
   left: 0;
   will-change: transform;
   filter: drop-shadow(0 4px 7px rgba(13, 148, 136, 0.08));
-  opacity: 0.55;
-  pointer-events: auto;
-  cursor: pointer;
-  transition: opacity 0.2s ease, filter 0.2s ease;
-}
-.note-glyph:hover {
-  opacity: 1;
-  filter: drop-shadow(0 7px 13px rgba(13, 148, 136, 0.3));
+  opacity: 0.5;
+  pointer-events: none; /* purely decorative */
 }
 .note-glyph svg {
   display: block;
 }
-.note-label {
-  position: absolute;
-  left: 50%;
-  top: 100%;
-  transform: translateX(-50%);
-  margin-top: 6px;
-  white-space: nowrap;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--accent);
-  background: var(--bg);
-  border: 1px solid var(--border);
-  padding: 1.5px 9px;
+
+/* Fixed, labeled music-note nav buttons */
+.note-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.9rem;
   border-radius: 999px;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  pointer-events: none;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+    border-color 0.18s ease, background-color 0.18s ease;
 }
-.note-glyph:hover .note-label {
-  opacity: 1;
+.note-btn:hover {
+  border-color: color-mix(in srgb, var(--accent-bright) 60%, var(--border));
+  background: var(--bg-soft);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -12px color-mix(in srgb, var(--accent) 60%, transparent);
+  text-decoration: none;
+}
+.note-btn-ico {
+  width: 0.95rem;
+  height: 1.15rem;
+  color: var(--accent);
+  flex: none;
 }
 .hero > .shell {
   position: relative;
