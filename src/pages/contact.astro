@@ -18,6 +18,12 @@ import { site } from "../config";
         </dd>
         <dt class="muted">Office</dt>
         <dd>{site.contact.office}</dd>
+        <dt class="muted">Lab</dt>
+        <dd>
+          <a href={site.affiliation.labUrl} target="_blank" rel="noopener">
+            {site.affiliation.lab} — unist-bci.com
+          </a>
+        </dd>
         <dt class="muted">Address</dt>
         <dd>
           {site.affiliation.university}<br />

@@ -30,6 +30,7 @@ export const site = {
   position: "PhD Candidate",
   affiliation: {
     lab: "BCI Lab",
+    labUrl: "https://www.unist-bci.com/",
     department: "Department of Biomedical Engineering",
     university: "UNIST",
     country: "South Korea",

@@ -52,8 +52,14 @@ const fmt = (d: Date) =>
       </div>
 
       <p class="kicker mt-7">
-        {site.position} · {site.affiliation.lab} · {site.affiliation.university},
-        {" "}{site.affiliation.country}
+        {site.position} ·{" "}
+        <a
+          href={site.affiliation.labUrl}
+          target="_blank"
+          rel="noopener"
+          class="underline decoration-dotted underline-offset-2 hover:decoration-solid"
+          >{site.affiliation.lab}</a
+        > · {site.affiliation.university}, {site.affiliation.country}
       </p>
       <h1 class="mt-4 text-5xl font-bold sm:text-6xl">
         <span class="name-grad">{site.name.en}</span>
