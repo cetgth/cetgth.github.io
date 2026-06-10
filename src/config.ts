@@ -56,7 +56,7 @@ export const site = {
     email: "cetgth@unist.ac.kr",
     github: "https://github.com/cetgth",
     scholar: "https://scholar.google.com/citations?user=zbd7DXoAAAAJ&hl=en",
-    orcid: "", // ← paste your ORCID URL (https://orcid.org/0000-...) or leave ""
+    orcid: "https://orcid.org/0009-0001-5111-9197",
     twitter: "", // leave "" to hide
   } as SocialLinks,
 
