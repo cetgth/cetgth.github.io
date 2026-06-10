@@ -15,21 +15,22 @@ export default {
         },
       },
       fontFamily: {
-        // Rounded but understated. One family (Nunito) for body + headings.
+        // Clean academic pairing: humanist sans body, serif headings.
         sans: [
-          "Nunito",
+          "Inter",
+          "IBM Plex Sans",
           "Noto Sans KR",
           "ui-sans-serif",
           "system-ui",
           "sans-serif",
         ],
-        // "serif" slot = headings/name (same rounded family, heavier weight).
         serif: [
-          "Nunito",
-          "Noto Sans KR",
-          "ui-sans-serif",
-          "system-ui",
-          "sans-serif",
+          "Source Serif 4",
+          "Lora",
+          "Noto Serif KR",
+          "ui-serif",
+          "Georgia",
+          "serif",
         ],
       },
       maxWidth: {

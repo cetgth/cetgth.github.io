@@ -8,9 +8,6 @@ const { size = "md" } = Astro.props;
 const cls = size === "sm" ? "h-4 w-4" : "h-5 w-5";
 
 const email = site.links.email ?? "";
-const [emailUser, emailDomain] = email.includes("@")
-  ? email.split("@")
-  : ["", ""];
 
 const items = [
   { key: "github", href: site.links.github, label: "GitHub" },
@@ -24,17 +21,15 @@ const items = [
   {
     email && (
       <a
-        class="js-email muted inline-flex items-center gap-1.5 no-underline hover:text-[color:var(--fg)]"
-        data-user={emailUser}
-        data-domain={emailDomain}
-        href="#"
+        class="muted inline-flex items-center gap-1.5 no-underline hover:text-[color:var(--fg)]"
+        href={`mailto:${email}`}
         aria-label="Email"
       >
         <svg class={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="2" y="4" width="20" height="16" rx="2" />
           <path d="m22 7-10 6L2 7" />
         </svg>
-        <span>{emailUser} [at] {emailDomain}</span>
+        <span>{email}</span>
       </a>
     )
   }
@@ -73,12 +68,3 @@ const items = [
     ))
   }
 </div>
-
-<script is:inline>
-  // De-obfuscate email only in the browser (basic anti-scrape).
-  document.querySelectorAll(".js-email").forEach((a) => {
-    const u = a.getAttribute("data-user");
-    const d = a.getAttribute("data-domain");
-    if (u && d) a.setAttribute("href", "mailto:" + u + "@" + d);
-  });
-</script>

@@ -18,7 +18,15 @@ const pubs = parseBibtex(bibRaw, { selfSurnames: [...site.selfSurnames] });
 const selected = pubs.filter((p) => p.selected).slice(0, 3);
 
 const email = site.links.email ?? "";
-const [emailUser, emailDomain] = email.includes("@") ? email.split("@") : ["", ""];
+
+// Floating notes link to these menu tabs (base-aware URLs resolved here).
+const navTargets = [
+  { href: url("research"), label: "Research" },
+  { href: url("publications"), label: "Publications" },
+  { href: url("cv"), label: "CV" },
+  { href: url("resources"), label: "Resources" },
+  { href: url("contact"), label: "Contact" },
+];
 
 const fmt = (d: Date) =>
   d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
@@ -53,14 +61,9 @@ const fmt = (d: Date) =>
       <p class="lead mt-5 max-w-xl">{site.interests}.</p>
 
       <div class="mt-8 flex flex-wrap items-center justify-center gap-2.5">
-        <a
-          class="btn btn-accent js-email"
-          data-user={emailUser}
-          data-domain={emailDomain}
-          href="#"
-        >
+        <a class="btn btn-accent" href={`mailto:${email}`}>
           <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 6L2 7"></path></svg>
-          Email
+          {email}
         </a>
         <a class="btn" href={url(site.cvPdf)} download>
           <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"></path><path d="M5 21h14"></path></svg>
@@ -74,18 +77,9 @@ const fmt = (d: Date) =>
             </a>
           )
         }
-        <button
-          id="play-melody"
-          class="btn"
-          type="button"
-          aria-label="Play a short melody"
-          aria-pressed="false"
-        >
-          <svg class="play-ico h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
-          <svg class="pause-ico hidden h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"></path></svg>
-          <span class="play-txt">Play melody</span>
-        </button>
       </div>
+
+      <p class="muted mt-5 text-xs">Tip: the floating notes link to each section ♪</p>
     </div>
 
     <!-- scroll-down cue -->
@@ -100,7 +94,7 @@ const fmt = (d: Date) =>
     <section class="reveal pt-16 sm:pt-24">
       <div class="flex items-end justify-between gap-4">
         <div>
-          <p class="kicker">Selected work</p>
+          <p class="kicker">Highlights</p>
           <h2 class="mt-2 text-2xl sm:text-3xl">Research</h2>
         </div>
         <a class="link-arrow" href={url("research")}>
@@ -147,12 +141,12 @@ const fmt = (d: Date) =>
       </div>
     </section>
 
-    <!-- SELECTED PUBLICATIONS -->
+    <!-- PUBLICATIONS -->
     <section class="reveal pt-16 sm:pt-24">
       <div class="flex items-end justify-between gap-4">
         <div>
           <p class="kicker">Recent</p>
-          <h2 class="mt-2 text-2xl sm:text-3xl">Selected publications</h2>
+          <h2 class="mt-2 text-2xl sm:text-3xl">Publications</h2>
         </div>
         <a class="link-arrow" href={url("publications")}>
           All publications
@@ -223,15 +217,14 @@ const fmt = (d: Date) =>
     </section>
   </div>
 
-  <!-- ── Floating pastel music glyphs (drift + mouse-repel) + playable melody ─ -->
-  <script is:inline>
+  <!-- ── Floating music glyphs: drift gently; each one links to a menu tab ─── -->
+  <script define:vars={{ navTargets }}>
     (() => {
       const field = document.getElementById("notes-field");
-      if (!field) return;
-      const hero = field.closest(".hero");
+      if (!field || !navTargets.length) return;
       const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      const PASTELS = ["#0d9488", "#14b8a6", "#2dd4bf", "#5eead4", "#99f6e4"];
+      const PALETTE = ["#0d9488", "#14b8a6", "#2dd4bf", "#5eead4", "#99f6e4"];
       const TYPES = ["eighth", "eighth", "eighth", "beamed", "beamed", "quarter", "quarter", "quarter", "clef"];
 
       function glyphSVG(type, c, s) {
@@ -246,16 +239,13 @@ const fmt = (d: Date) =>
       }
 
       let W = 0, H = 0;
-      const measure = () => {
-        const r = hero.getBoundingClientRect();
-        W = r.width; H = r.height;
-      };
+      const measure = () => { const r = field.getBoundingClientRect(); W = r.width; H = r.height; };
       measure();
       window.addEventListener("resize", measure);
 
       const N = Math.max(8, Math.min(15, Math.round(window.innerWidth / 115)));
       const rnd = (a, b) => a + Math.random() * (b - a);
-      const MAX_CLEF = 2; // hard cap so treble clefs stay rare
+      const MAX_CLEF = 2;
       let clefCount = 0;
       const glyphs = [];
       for (let i = 0; i < N; i++) {
@@ -264,57 +254,42 @@ const fmt = (d: Date) =>
           if (clefCount >= MAX_CLEF) type = "eighth";
           else clefCount++;
         }
-        const color = PASTELS[(Math.random() * PASTELS.length) | 0];
+        const color = PALETTE[(Math.random() * PALETTE.length) | 0];
         const size = rnd(16, 34);
-        const el = document.createElement("div");
+        const dest = navTargets[i % navTargets.length];
+        const el = document.createElement("a");
         el.className = "note-glyph";
-        el.innerHTML = glyphSVG(type, color, size);
+        el.href = dest.href;
+        el.tabIndex = -1;
+        el.setAttribute("aria-label", "Go to " + dest.label);
+        el.innerHTML = glyphSVG(type, color, size) + `<span class="note-label">${dest.label}</span>`;
         field.appendChild(el);
         const g = {
           el,
           x: rnd(0, W), y: rnd(0, H),
-          vx: rnd(-0.28, 0.28), vy: -rnd(0.12, 0.36),
-          rot: rnd(-22, 22), vr: rnd(-0.18, 0.18),
-          phase: rnd(0, Math.PI * 2), amp: rnd(5, 12),
-          pop: 0,
+          vx: rnd(-0.24, 0.24), vy: -rnd(0.1, 0.3),
+          rot: rnd(-18, 18), vr: rnd(-0.14, 0.14),
+          phase: rnd(0, Math.PI * 2), amp: rnd(4, 10),
+          hover: false,
         };
+        el.addEventListener("pointerenter", () => (g.hover = true));
+        el.addEventListener("pointerleave", () => (g.hover = false));
         el.style.transform = `translate(${g.x}px, ${g.y}px) rotate(${g.rot}deg)`;
         glyphs.push(g);
       }
 
-      const mouse = { x: -9999, y: -9999, on: false };
-      hero.addEventListener("pointermove", (e) => {
-        const r = hero.getBoundingClientRect();
-        mouse.x = e.clientX - r.left;
-        mouse.y = e.clientY - r.top;
-        mouse.on = true;
-      });
-      hero.addEventListener("pointerleave", () => {
-        mouse.on = false; mouse.x = -9999; mouse.y = -9999;
-      });
-
-      const R = 130;
       function frame(t) {
         for (const g of glyphs) {
-          g.x += g.vx;
-          g.y += g.vy;
-          g.rot += g.vr;
-          if (g.y < -70) { g.y = H + 50; g.x = rnd(0, W); }
-          if (g.x < -70) g.x = W + 50;
-          else if (g.x > W + 70) g.x = -50;
-          const bob = Math.sin(t * 0.001 + g.phase) * g.amp;
-          let ox = 0, oy = 0;
-          if (mouse.on) {
-            const dx = g.x - mouse.x, dy = g.y + bob - mouse.y;
-            const d = Math.hypot(dx, dy);
-            if (d < R && d > 0.01) {
-              const f = (R - d) / R, push = f * 40;
-              ox = (dx / d) * push; oy = (dy / d) * push;
-            }
+          if (!g.hover) {
+            g.x += g.vx; g.y += g.vy; g.rot += g.vr;
+            if (g.y < -70) { g.y = H + 50; g.x = rnd(0, W); }
+            if (g.x < -70) g.x = W + 50;
+            else if (g.x > W + 70) g.x = -50;
           }
-          g.pop *= 0.9;
-          const sc = 1 + g.pop;
-          g.el.style.transform = `translate(${g.x + ox}px, ${g.y + bob + oy}px) rotate(${g.rot}deg) scale(${sc})`;
+          const bob = g.hover ? 0 : Math.sin(t * 0.001 + g.phase) * g.amp;
+          const rot = g.hover ? 0 : g.rot;
+          const sc = g.hover ? 1.35 : 1;
+          g.el.style.transform = `translate(${g.x}px, ${g.y + bob}px) rotate(${rot}deg) scale(${sc})`;
         }
         raf = requestAnimationFrame(frame);
       }
@@ -326,43 +301,6 @@ const fmt = (d: Date) =>
         if (running) raf = requestAnimationFrame(frame);
         else cancelAnimationFrame(raf);
       });
-
-      // ── Web Audio: play a short melody; each note pops a random glyph ──────
-      const btn = document.getElementById("play-melody");
-      const MELODY = [0, 4, 7, 9, 7, 12, 9, 5, 7, 4, 2, 0];
-      const FREQ = MELODY.map((s) => 261.63 * Math.pow(2, s / 12));
-      let actx = null, playing = false, timer = null, idx = 0;
-      function noteOn(f, dur) {
-        const o = actx.createOscillator(), g = actx.createGain();
-        o.type = "triangle"; o.frequency.value = f;
-        const t = actx.currentTime;
-        g.gain.setValueAtTime(0.0001, t);
-        g.gain.linearRampToValueAtTime(0.16, t + 0.02);
-        g.gain.exponentialRampToValueAtTime(0.0008, t + dur);
-        o.connect(g).connect(actx.destination);
-        o.start(t); o.stop(t + dur + 0.03);
-      }
-      function ui(p) {
-        btn.querySelector(".play-ico").classList.toggle("hidden", p);
-        btn.querySelector(".pause-ico").classList.toggle("hidden", !p);
-        btn.querySelector(".play-txt").textContent = p ? "Stop" : "Play melody";
-        btn.setAttribute("aria-pressed", p ? "true" : "false");
-      }
-      function stop() { playing = false; clearInterval(timer); ui(false); }
-      function start() {
-        if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
-        actx.resume(); playing = true; idx = 0; ui(true);
-        const step = () => {
-          if (!playing) return;
-          noteOn(FREQ[idx % MELODY.length], 0.22);
-          const g = glyphs[(Math.random() * glyphs.length) | 0];
-          if (g) g.pop = 0.7;
-          idx++;
-        };
-        step();
-        timer = setInterval(step, 250);
-      }
-      btn && btn.addEventListener("click", () => (playing ? stop() : start()));
     })();
   </script>
 </BaseLayout>

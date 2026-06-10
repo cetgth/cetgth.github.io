@@ -221,9 +221,38 @@ html.dark {
   will-change: transform;
   filter: drop-shadow(0 4px 7px rgba(13, 148, 136, 0.08));
   opacity: 0.55;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: opacity 0.2s ease, filter 0.2s ease;
+}
+.note-glyph:hover {
+  opacity: 1;
+  filter: drop-shadow(0 7px 13px rgba(13, 148, 136, 0.3));
 }
 .note-glyph svg {
   display: block;
+}
+.note-label {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  margin-top: 6px;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 1.5px 9px;
+  border-radius: 999px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+.note-glyph:hover .note-label {
+  opacity: 1;
 }
 .hero > .shell {
   position: relative;
