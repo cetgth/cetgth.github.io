@@ -13,6 +13,8 @@ const nav = [
 ];
 
 const here = Astro.url.pathname;
+// Home uses the music-note buttons for navigation, so hide the header tabs there.
+const isHome = isActive(here, "");
 ---
 
 <header
@@ -31,7 +33,8 @@ const here = Astro.url.pathname;
 
     <nav class="flex items-center gap-1 sm:gap-2">
       {
-        nav.map((item) => (
+        !isHome &&
+          nav.map((item) => (
           <a
             href={url(item.href)}
             class:list={[
