@@ -5,5 +5,5 @@
   <rect x="430" y="140" width="120" height="80" rx="14" fill="#ffffff" stroke="#14b8a6" stroke-width="5"/>
   <circle cx="150" cy="180" r="14" fill="#0d9488"/>
   <circle cx="490" cy="180" r="14" fill="#2dd4bf"/>
-  <text x="320" y="340" font-family="Inter, sans-serif" font-size="18" text-anchor="middle" fill="#0f766e">key figure — online BCI loop</text>
+  <text x="320" y="340" font-family="Inter, sans-serif" font-size="18" text-anchor="middle" fill="#0f766e">real-time melody BCI</text>
 </svg>

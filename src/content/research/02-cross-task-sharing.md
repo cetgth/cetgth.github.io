@@ -1,13 +1,11 @@
 ---
-title: "Cross-task representational sharing"
-summary: "Quantifying production–imagery coupling: do the brain patterns that generate music also underlie imagining it?"
+title: "Decoding musical pitch from EEG"
+summary: "Neural representations of musical pitch during music perception and imagery, toward EEG-based pitch decoding."
 image: "images/research-2.svg"
 order: 2
-pub: "https://example.com/ccn2024"
-pubLabel: "Yoon et al., 2024 (CCN)"
-tags: ["RSA", "imagery", "production"]
+tags: ["EEG decoding", "pitch", "imagery"]
 ---
 
-Using representational similarity analysis, we ask whether the neural geometry
-of **music production** is reused during **music imagery**. Early results show
-significant subject-internal coupling. (Placeholder text — replace with yours.)
+How is musical pitch represented in the brain during listening versus imagining?
+We characterize these neural representations to decode pitch from EEG.
+(Presented at ISMIR 2025.)
