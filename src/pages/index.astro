@@ -19,13 +19,13 @@ const selected = pubs.filter((p) => p.selected).slice(0, 3);
 
 const email = site.links.email ?? "";
 
-// Fixed, labeled note-buttons → menu tabs (base-aware URLs).
-const navTargets = [
-  { href: url("research"), label: "Research" },
-  { href: url("publications"), label: "Publications" },
-  { href: url("cv"), label: "CV" },
-  { href: url("resources"), label: "Resources" },
-  { href: url("contact"), label: "Contact" },
+// Each music note IS a button → links to a menu tab; label underneath.
+const navNotes = [
+  { href: url("research"), label: "Research", note: "eighth" },
+  { href: url("publications"), label: "Publications", note: "beamed" },
+  { href: url("cv"), label: "CV", note: "quarter" },
+  { href: url("resources"), label: "Resources", note: "clef" },
+  { href: url("contact"), label: "Contact", note: "eighth" },
 ];
 
 const fmt = (d: Date) =>
@@ -57,17 +57,12 @@ const fmt = (d: Date) =>
       <h1 class="mt-4 text-5xl font-bold sm:text-6xl">
         <span class="name-grad">{site.name.en}</span>
       </h1>
-      <p class="muted mt-2 text-lg">{site.name.ko}</p>
       <p class="lead mt-5 max-w-xl">{site.interests}.</p>
 
-      <div class="mt-8 flex flex-wrap items-center justify-center gap-2.5">
+      <div class="mt-7 flex flex-wrap items-center justify-center gap-2.5">
         <a class="btn btn-accent" href={`mailto:${email}`}>
           <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 6L2 7"></path></svg>
           {email}
-        </a>
-        <a class="btn" href={url(site.cvPdf)} download>
-          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"></path><path d="M5 21h14"></path></svg>
-          CV
         </a>
         {
           site.links.github && (
@@ -79,20 +74,40 @@ const fmt = (d: Date) =>
         }
       </div>
 
-      <!-- Fixed, labeled note-buttons → each goes to a menu tab -->
+      <!-- The music note itself is the button; the label says where it goes. -->
       <nav
-        class="mt-6 flex flex-wrap items-center justify-center gap-2.5"
+        class="mt-9 flex flex-wrap items-end justify-center gap-7 sm:gap-10"
         aria-label="Sections"
       >
         {
-          navTargets.map((t) => (
-            <a class="note-btn" href={t.href}>
-              <svg class="note-btn-ico" viewBox="0 0 24 32" fill="none" aria-hidden="true">
-                <ellipse cx="8" cy="25" rx="6" ry="4.5" transform="rotate(-20 8 25)" fill="currentColor" />
-                <path d="M13 24 V5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
-                <path d="M13 5 c7 1.5 8 7 4 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
-              </svg>
-              <span>{t.label}</span>
+          navNotes.map((n) => (
+            <a class="note-link" href={n.href}>
+              {n.note === "eighth" && (
+                <svg class="note-link-ico" viewBox="0 0 36 50" aria-hidden="true">
+                  <ellipse cx="12" cy="39" rx="8.5" ry="6.5" transform="rotate(-22 12 39)" fill="currentColor" />
+                  <path d="M19 38 V9" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" />
+                  <path d="M19 9 c10 2 12 11 6 18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" />
+                </svg>
+              )}
+              {n.note === "beamed" && (
+                <svg class="note-link-ico" viewBox="0 0 50 50" aria-hidden="true">
+                  <ellipse cx="11" cy="40" rx="8" ry="6" transform="rotate(-22 11 40)" fill="currentColor" />
+                  <ellipse cx="34" cy="40" rx="8" ry="6" transform="rotate(-22 34 40)" fill="currentColor" />
+                  <path d="M18 40 V13" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" />
+                  <path d="M41 40 V13" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" />
+                  <path d="M17 14 H42" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" />
+                </svg>
+              )}
+              {n.note === "quarter" && (
+                <svg class="note-link-ico" viewBox="0 0 30 50" aria-hidden="true">
+                  <ellipse cx="11" cy="39" rx="8.5" ry="6.5" transform="rotate(-22 11 39)" fill="currentColor" />
+                  <path d="M18.2 38 V9" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" />
+                </svg>
+              )}
+              {n.note === "clef" && (
+                <span class="note-link-ico clef" aria-hidden="true">𝄞</span>
+              )}
+              <span class="note-link-label">{n.label}</span>
             </a>
           ))
         }
@@ -251,7 +266,6 @@ const fmt = (d: Date) =>
           return `<svg viewBox="0 0 36 50" width="${s}" height="${(s * 50) / 36}"><ellipse cx="12" cy="39" rx="8.5" ry="6.5" transform="rotate(-22 12 39)" fill="${c}"/><path d="M19 38 V9" fill="none" stroke="${c}" stroke-width="3.4" stroke-linecap="round"/><path d="M19 9 c10 2 12 11 6 18" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round"/></svg>`;
         if (type === "beamed")
           return `<svg viewBox="0 0 50 50" width="${s * 1.3}" height="${(s * 50) / 50 * 1.3}"><ellipse cx="11" cy="40" rx="8" ry="6" transform="rotate(-22 11 40)" fill="${c}"/><ellipse cx="34" cy="40" rx="8" ry="6" transform="rotate(-22 34 40)" fill="${c}"/><path d="M18 40 V13" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round"/><path d="M41 40 V13" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round"/><path d="M17 14 H42" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round"/></svg>`;
-        // treble clef — real glyph from the Noto Music webfont
         return `<span style="font-family:'Noto Music',serif;font-size:${(s * 1.5) | 0}px;line-height:1;color:${c};display:block;">𝄞</span>`;
       }
 

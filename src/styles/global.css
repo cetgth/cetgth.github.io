@@ -227,34 +227,40 @@ html.dark {
   display: block;
 }
 
-/* Fixed, labeled music-note nav buttons */
-.note-btn {
+/* Nav buttons where the music note itself IS the button (label underneath) */
+.note-link {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.45rem 0.9rem;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--bg);
+  gap: 0.3rem;
+  text-decoration: none;
+  color: var(--fg-muted);
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+.note-link:hover {
   color: var(--fg);
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: transform 0.18s ease, box-shadow 0.18s ease,
-    border-color 0.18s ease, background-color 0.18s ease;
-}
-.note-btn:hover {
-  border-color: color-mix(in srgb, var(--accent-bright) 60%, var(--border));
-  background: var(--bg-soft);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px -12px color-mix(in srgb, var(--accent) 60%, transparent);
+  transform: translateY(-3px);
   text-decoration: none;
 }
-.note-btn-ico {
-  width: 0.95rem;
-  height: 1.15rem;
+.note-link-ico {
   color: var(--accent);
-  flex: none;
+  height: 48px;
+  display: block;
+  transition: transform 0.2s ease, filter 0.2s ease, color 0.2s ease;
+}
+.note-link:hover .note-link-ico {
+  transform: scale(1.15);
+  color: var(--accent-strong);
+  filter: drop-shadow(0 9px 15px color-mix(in srgb, var(--accent) 45%, transparent));
+}
+.note-link-ico.clef {
+  font-family: "Noto Music", serif;
+  font-size: 42px;
+  line-height: 1.05;
+}
+.note-link-label {
+  font-size: 0.82rem;
+  font-weight: 600;
 }
 .hero > .shell {
   position: relative;

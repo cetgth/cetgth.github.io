@@ -2,7 +2,7 @@
  * ────────────────────────────────────────────────────────────────────────────
  *  SITE CONFIG — single source of truth.
  *  Edit THIS file to update your name, links, and identity across the whole site.
- *  (See CONTENT_GUIDE.md for "무엇을 어디서 수정?")
+ *  (See CONTENT_GUIDE.md for what to edit where.)
  * ────────────────────────────────────────────────────────────────────────────
  */
 
@@ -18,10 +18,9 @@ export const site = {
   /** Used for <title>, meta tags, and the deployed canonical URL. */
   url: "https://cetgth.github.io", // user site (repo: cetgth.github.io)
 
-  /** Your name. Korean is shown as a subtitle next to the English name. */
+  /** Your name. */
   name: {
     en: "Chae-Eun Yoon",
-    ko: "윤채은",
   },
 
   /** Surnames that should be rendered in bold in the author lists (you + aliases). */
