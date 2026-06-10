@@ -2,26 +2,28 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Edit these arrays to list your repos / datasets / tools.
+// Add `href` to make an item a link; add `status` (e.g. "TBD", "Not yet public")
+// to show a badge. Items without href render as plain text (no broken links).
 const repos = [
   {
     name: "eeg-contour",
     desc: "EEG melodic-contour decoding pipeline (MNE-Python + scikit-learn).",
-    href: "https://github.com/cetgth/eeg-contour",
     lang: "Python",
+    status: "TBD",
   },
   {
     name: "music-bci-rt",
     desc: "Real-time music-imagery BCI prototype and calibration utilities.",
-    href: "https://github.com/cetgth/music-bci-rt",
     lang: "Python",
+    status: "TBD",
   },
 ];
 
 const datasets = [
   {
-    name: "Contour-EEG (placeholder)",
-    desc: "64-ch EEG during melodic listening/imagery/production. N=20.",
-    href: "https://openneuro.org/",
+    name: "Contour-EEG",
+    desc: "32-ch EEG during melodic listening / imagery / production. N=30.",
+    status: "Not yet public",
   },
 ];
 
@@ -29,7 +31,7 @@ const tools = [
   {
     name: "contourkit",
     desc: "Small toolbox for representing and scoring melodic contours.",
-    href: "https://github.com/cetgth/contourkit",
+    status: "TBD",
   },
 ];
 ---
@@ -38,7 +40,8 @@ const tools = [
   <header class="prose-measure">
     <h1 class="text-3xl">Code & Data</h1>
     <p class="muted mt-2">
-      Open-source code, public datasets, and tools from my research.
+      Code, datasets, and tools from my research. Several are in progress —
+      links will appear here as they are released.
     </p>
   </header>
 
@@ -46,22 +49,28 @@ const tools = [
     <h2 class="text-lg">Repositories</h2>
     <div class="mt-4 grid gap-4 sm:grid-cols-2">
       {
-        repos.map((r) => (
-          <a
-            class="card block no-underline"
-            href={r.href}
-            target="_blank"
-            rel="noopener"
-          >
-            <div class="flex items-center justify-between">
-              <span class="font-mono font-semibold" style="color: var(--fg);">
-                {r.name}
-              </span>
-              <span class="tag">{r.lang}</span>
-            </div>
-            <p class="muted mt-2 text-sm">{r.desc}</p>
-          </a>
-        ))
+        repos.map((r) => {
+          const Tag = r.href ? "a" : "div";
+          return (
+            <Tag
+              class="card block no-underline"
+              href={r.href}
+              target={r.href ? "_blank" : undefined}
+              rel={r.href ? "noopener" : undefined}
+            >
+              <div class="flex items-center justify-between gap-2">
+                <span class="font-mono font-semibold" style="color: var(--fg);">
+                  {r.name}
+                </span>
+                <span class="flex shrink-0 items-center gap-1.5">
+                  {r.lang && <span class="tag">{r.lang}</span>}
+                  {r.status && <span class="tag">{r.status}</span>}
+                </span>
+              </div>
+              <p class="muted mt-2 text-sm">{r.desc}</p>
+            </Tag>
+          );
+        })
       }
     </div>
   </section>
@@ -72,9 +81,16 @@ const tools = [
       {
         datasets.map((d) => (
           <li class="prose-measure">
-            <a href={d.href} target="_blank" rel="noopener">
-              {d.name}
-            </a>
+            {d.href ? (
+              <a href={d.href} target="_blank" rel="noopener">
+                {d.name}
+              </a>
+            ) : (
+              <span class="font-medium" style="color: var(--fg);">
+                {d.name}
+              </span>
+            )}
+            {d.status && <span class="tag ml-2">{d.status}</span>}
             <span class="muted"> — {d.desc}</span>
           </li>
         ))
@@ -88,9 +104,16 @@ const tools = [
       {
         tools.map((t) => (
           <li class="prose-measure">
-            <a href={t.href} target="_blank" rel="noopener">
-              {t.name}
-            </a>
+            {t.href ? (
+              <a href={t.href} target="_blank" rel="noopener">
+                {t.name}
+              </a>
+            ) : (
+              <span class="font-medium" style="color: var(--fg);">
+                {t.name}
+              </span>
+            )}
+            {t.status && <span class="tag ml-2">{t.status}</span>}
             <span class="muted"> — {t.desc}</span>
           </li>
         ))
