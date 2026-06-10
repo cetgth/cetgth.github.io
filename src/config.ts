@@ -32,6 +32,7 @@ export const site = {
     lab: "BCI Lab",
     department: "Department of Biomedical Engineering",
     university: "UNIST",
+    country: "South Korea",
   },
 
   /** Short bio paragraph(s) on the home page. Each array item is a <p>. */
