@@ -33,6 +33,7 @@ export const site = {
     labUrl: "https://www.unist-bci.com/",
     department: "Department of Biomedical Engineering",
     university: "UNIST",
+    universityFull: "Ulsan National Institute of Science and Technology",
     country: "South Korea",
   },
 
