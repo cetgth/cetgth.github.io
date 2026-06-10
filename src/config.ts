@@ -27,7 +27,7 @@ export const site = {
   selfSurnames: ["Yoon"],
 
   /** One-line role + affiliation, shown under your name on the home page. */
-  position: "PhD Candidate",
+  position: "PhD Student",
   affiliation: {
     lab: "BCI Lab",
     labUrl: "https://www.unist-bci.com/",
