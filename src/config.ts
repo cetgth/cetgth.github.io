@@ -63,7 +63,7 @@ export const site = {
 
   /** Contact page details. */
   contact: {
-    office: "BCI Lab, UNIST",
+    office: "BCI Lab — Bldg. 104, Rm. 903A, UNIST",
     address: "UNIST, 50 UNIST-gil, Ulju-gun, Ulsan 44919, Republic of Korea",
     message:
       "I'm always happy to talk about music, brains, and BCIs. Feel free to reach out if you'd like to collaborate, are visiting a conference I'm at, or just want to chat.",
