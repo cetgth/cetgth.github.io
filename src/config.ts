@@ -48,7 +48,7 @@ export const site = {
     "Music Neuroscience · EEG decoding · Brain–Computer Interfaces · Music Imagery & Production",
 
   /** Profile photo: drop a file in /public/images/ and point here (relative to /public). */
-  photo: "images/profile.svg",
+  photo: "images/profile.jpg",
 
   /** Path to your CV PDF (relative to /public). Replace public/cv.pdf with the real file. */
   cvPdf: "cv.pdf",
