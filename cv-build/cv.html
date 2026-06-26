@@ -4,67 +4,102 @@
 <meta charset="utf-8">
 <title>Chae-Eun Yoon — Curriculum Vitae</title>
 <style>
-  @page { size: A4; margin: 16mm 18mm; }
+  @page { size: A4; margin: 14mm 16mm; }
   * { box-sizing: border-box; }
-  body { font-family: Georgia, 'Times New Roman', serif; color:#1a1a1a; font-size:10.5pt; line-height:1.45; margin:0; }
-  a { color:#1a1a1a; text-decoration:none; }
-  header { text-align:center; margin-bottom:2px; }
-  .name { font-size:23pt; font-weight:700; letter-spacing:.5px; }
-  .subtitle { font-size:10.5pt; margin-top:5px; color:#222; }
-  .affil { font-size:10pt; margin-top:2px; color:#333; }
-  .contact { font-size:9pt; margin-top:6px; color:#444; line-height:1.5; }
-  .rule { border:0; border-top:1.5px solid #222; margin:10px 0 0; }
-  h2 { font-size:10.5pt; font-weight:700; text-transform:uppercase; letter-spacing:1.2px;
-       border-bottom:1px solid #999; padding-bottom:2px; margin:15px 0 7px; }
-  .entry { display:flex; justify-content:space-between; gap:14px; margin-bottom:6px; }
-  .entry .main { flex:1; }
-  .entry .date { white-space:nowrap; color:#333; font-size:9.5pt; padding-top:1px; }
-  .role { font-weight:700; }
-  .desc { color:#333; }
-  .pub { margin-bottom:7px; }
-  .interests { text-align:center; font-size:9.7pt; color:#333; margin-top:8px; font-style:italic; }
-  .updated { margin-top:18px; font-size:8.5pt; color:#888; text-align:right; }
+  body { font-family: Georgia, 'Times New Roman', serif; color:#222; font-size:10pt; line-height:1.4; margin:0; }
+  a { color:#555; text-decoration:none; }
+  .name { text-align:center; font-size:25pt; font-weight:400; letter-spacing:1px; }
+  .subtitle { text-align:center; font-variant:small-caps; letter-spacing:2px; color:#666; font-size:9pt; margin-top:3px; }
+  .contact { text-align:center; font-size:8.7pt; color:#555; margin-top:7px; }
+  h2 { display:flex; align-items:center; gap:10px; font-size:13pt; font-weight:700; margin:16px 0 8px; }
+  h2::after { content:""; flex:1; height:1px; background:#bbb; }
+  .entry { margin-bottom:8px; }
+  .row { display:flex; justify-content:space-between; gap:14px; align-items:baseline; }
+  .org { font-weight:700; }
+  .loc { font-style:italic; color:#666; font-size:9pt; white-space:nowrap; }
+  .pos { font-size:9.8pt; }
+  .date { font-style:italic; color:#777; font-size:9pt; white-space:nowrap; }
+  .entry ul { margin:2px 0 0; padding-left:16px; }
+  .entry li { font-size:9.4pt; color:#333; margin-bottom:1px; }
+  .pub, .pres { margin-bottom:6px; font-size:9.6pt; padding-left:16px; text-indent:-16px; }
   strong.self { font-weight:700; }
+  .forth { font-style:italic; color:#777; }
+  ul.interests { margin:2px 0 0; padding-left:16px; columns:2; column-gap:24px; }
+  ul.interests li { font-size:9.5pt; color:#333; margin-bottom:2px; }
+  .updated { margin-top:16px; font-size:8pt; color:#999; text-align:right; }
 </style>
 </head>
 <body>
-  <header>
-    <div class="name">Chae-Eun Yoon</div>
-    <div class="subtitle">PhD Student · Brain&ndash;Computer Interface Lab, Department of Biomedical Engineering</div>
-    <div class="affil">Ulsan National Institute of Science and Technology (UNIST), Ulsan, Republic of Korea</div>
-    <div class="contact">
-      UNIST, 50 UNIST-gil, Ulju-gun, Ulsan 44919, Republic of Korea<br>
-      cetgth@unist.ac.kr &nbsp;·&nbsp; cetgth.github.io &nbsp;·&nbsp; ORCID 0009-0001-5111-9197 &nbsp;·&nbsp; Google Scholar
-    </div>
-    <hr class="rule">
-  </header>
-
-  <div class="interests">Music Neuroscience · EEG decoding · Brain&ndash;Computer Interfaces · Music Imagery &amp; Production</div>
+  <div class="name">Chae-Eun Yoon</div>
+  <div class="subtitle">PhD Student · Biomedical Engineering · UNIST</div>
+  <div class="contact">
+    <a href="mailto:cetgth@unist.ac.kr">cetgth@unist.ac.kr</a> &nbsp;|&nbsp;
+    <a href="https://cetgth.github.io">cetgth.github.io</a> &nbsp;|&nbsp;
+    ORCID 0009-0001-5111-9197 &nbsp;|&nbsp;
+    <a href="https://scholar.google.com/citations?user=zbd7DXoAAAAJ">Google Scholar</a>
+  </div>
 
   <h2>Education</h2>
-  <div class="entry"><div class="main"><span class="role">Integrated M.S.&ndash;Ph.D., Biomedical Engineering</span><br>Ulsan National Institute of Science and Technology (UNIST), BCI Lab</div><div class="date">2023&ndash;present</div></div>
-  <div class="entry"><div class="main"><span class="role">B.S., Chemical, Biological and Environmental Engineering</span><br>Pusan National University</div><div class="date">2019&ndash;2023</div></div>
+  <div class="entry">
+    <div class="row"><span class="org">Ulsan National Institute of Science and Technology (UNIST)</span><span class="loc">Ulsan, Republic of Korea</span></div>
+    <div class="row"><span class="pos">Integrated M.S.&ndash;Ph.D. in Biomedical Engineering</span><span class="date">2023 &ndash; present</span></div>
+    <ul><li>Brain&ndash;Computer Interface (BCI) Lab &middot; Advisor: Sung-Phil Kim</li></ul>
+  </div>
+  <div class="entry">
+    <div class="row"><span class="org">Pusan National University</span><span class="loc">Busan, Republic of Korea</span></div>
+    <div class="row"><span class="pos">B.S. in Chemical, Biological and Environmental Engineering</span><span class="date">2019 &ndash; 2023</span></div>
+  </div>
 
   <h2>Research Experience</h2>
-  <div class="entry"><div class="main"><span class="role">Graduate Researcher</span>, BCI Lab, UNIST<br><span class="desc">EEG decoding of musical pitch and melody imagery; closed-loop music-imagery BCIs.</span></div><div class="date">2023&ndash;present</div></div>
-  <div class="entry"><div class="main"><span class="role">Undergraduate Researcher</span>, WATER Lab, Pusan National University</div><div class="date">2021&ndash;2022</div></div>
+  <div class="entry">
+    <div class="row"><span class="org">Brain&ndash;Computer Interface Lab, UNIST</span><span class="loc">Ulsan, Republic of Korea</span></div>
+    <div class="row"><span class="pos">Graduate Researcher</span><span class="date">2023 &ndash; present</span></div>
+    <ul><li>EEG decoding of musical pitch and melody imagery; closed-loop music-imagery BCIs.</li></ul>
+  </div>
+  <div class="entry">
+    <div class="row"><span class="org">Water Treatment and Reuse (WATER) Lab, Pusan National University</span><span class="loc">Busan, Republic of Korea</span></div>
+    <div class="row"><span class="pos">Undergraduate Researcher</span><span class="date">2021 &ndash; 2022</span></div>
+  </div>
 
   <h2>Grants &amp; Fellowships</h2>
-  <div class="entry"><div class="main"><span class="role">Doctoral Student Research Grant</span>, National Research Foundation of Korea (NRF) &mdash; <em>Principal Investigator</em><br><span class="desc">Real-Time Playback of Imagined Melodies via a Closed-Loop Noninvasive EEG Brain&ndash;Computer Interface.</span></div><div class="date">2025&ndash;2027</div></div>
-  <div class="entry"><div class="main"><span class="role">Music Braincoder</span>, NRF Core Research Program (Type B) &mdash; <em>Participating Researcher</em><br><span class="desc">Development of a noninvasive brain&ndash;computer interface for reproducing imagined music and enhancing musical performance.</span></div><div class="date">2025&ndash;present</div></div>
+  <div class="entry">
+    <div class="row"><span class="org">Doctoral Student Research Grant, National Research Foundation of Korea (NRF)</span><span class="date">2025 &ndash; 2027</span></div>
+    <div class="row"><span class="pos"><em>Principal Investigator</em></span></div>
+    <ul><li>Real-Time Playback of Imagined Melodies via a Closed-Loop Noninvasive EEG Brain&ndash;Computer Interface.</li></ul>
+  </div>
+  <div class="entry">
+    <div class="row"><span class="org">Music Braincoder &mdash; NRF Core Research Program (Type B)</span><span class="date">2025 &ndash; present</span></div>
+    <div class="row"><span class="pos"><em>Participating Researcher</em></span></div>
+    <ul><li>Development of a noninvasive brain&ndash;computer interface for reproducing imagined music and enhancing musical performance.</li></ul>
+  </div>
 
   <h2>Publications</h2>
   <div class="pub">Kim, J., <strong class="self">Yoon, C.-E.</strong>, Seo, S., &amp; Kim, S.-P. (2026). Real-Time Single-Trial Decoding in a Calibration-Free P300-Based BCI Using a Compact Eight-Channel EEG Configuration. <em>2026 14th International Conference on Brain&ndash;Computer Interface (BCI)</em>, 1&ndash;6.</div>
 
   <h2>Conference Presentations</h2>
-  <div class="entry"><div class="main"><strong class="self">Yoon, C.-E.</strong>, &amp; Kim, S.-P. Decoding Melodic Contour from Human Electroencephalography Using Spectral Patterns. <em>Brain Engineering Society of Korea (BESK)</em>, Jeju, Korea. <span class="desc">(forthcoming)</span></div><div class="date">2026</div></div>
-  <div class="entry"><div class="main"><strong class="self">Yoon, C.-E.</strong>, &amp; Kim, S.-P. Effects of Visual Cues on Musical Melody Imagery for EEG-based Brain&ndash;Computer Interfaces. <em>Society for Neuroscience (SfN)</em>.</div><div class="date">2025</div></div>
-  <div class="entry"><div class="main"><strong class="self">Yoon, C.-E.</strong>, &amp; Kim, S.-P. Neural Representation of Musical Pitch During Music Perception and Imagery. <em>International Society for Music Information Retrieval (ISMIR)</em>.</div><div class="date">2025</div></div>
-  <div class="entry"><div class="main"><strong class="self">Yoon, C.-E.</strong>, &amp; Kim, S.-P. Design of Visual Guidance for Musical Pitch Imagery. <em>5th International Conference on Emotion and Sensibility (ICES)</em>, Jeju, Korea.</div><div class="date">2023</div></div>
+  <div class="pres"><strong class="self">Yoon, C.-E.</strong>, &amp; Kim, S.-P. (2026). Decoding Melodic Contour from Human Electroencephalography during Music Listening, Imagery, and Production. <em>Society for Neuroscience (SfN)</em>. <span class="forth">(forthcoming)</span></div>
+  <div class="pres"><strong class="self">Yoon, C.-E.</strong>, &amp; Kim, S.-P. (2026). Decoding Melodic Contour from Human Electroencephalography Using Spectral Patterns. <em>Brain Engineering Society of Korea (BESK)</em>, Jeju, Republic of Korea. <span class="forth">(forthcoming)</span></div>
+  <div class="pres"><strong class="self">Yoon, C.-E.</strong>, &amp; Kim, S.-P. (2025). Effects of Visual Cues on Musical Melody Imagery for EEG-based Brain&ndash;Computer Interfaces. <em>Society for Neuroscience (SfN)</em>.</div>
+  <div class="pres"><strong class="self">Yoon, C.-E.</strong>, &amp; Kim, S.-P. (2025). Neural Representation of Musical Pitch During Music Perception and Imagery. <em>International Society for Music Information Retrieval (ISMIR)</em>.</div>
+  <div class="pres"><strong class="self">Yoon, C.-E.</strong>, &amp; Kim, S.-P. (2023). Design of Visual Guidance for Musical Pitch Imagery. <em>5th International Conference on Emotion and Sensibility (ICES)</em>, Jeju, Republic of Korea.</div>
 
   <h2>Teaching</h2>
-  <div class="entry"><div class="main"><span class="role">Teaching Assistant</span>, Brain &amp; Cognitive Engineering &mdash; UNIST</div><div class="date">Fall 2025</div></div>
-  <div class="entry"><div class="main"><span class="role">Teaching Assistant</span>, AI-based Neural Data Science &mdash; UNIST</div><div class="date">Spring 2024</div></div>
+  <div class="entry">
+    <div class="row"><span class="org">Brain &amp; Cognitive Engineering</span><span class="date">Fall 2025</span></div>
+    <div class="row"><span class="pos">Teaching Assistant &mdash; UNIST</span></div>
+  </div>
+  <div class="entry">
+    <div class="row"><span class="org">AI-based Neural Data Science</span><span class="date">Spring 2024</span></div>
+    <div class="row"><span class="pos">Teaching Assistant &mdash; UNIST</span></div>
+  </div>
+
+  <h2>Research Interests</h2>
+  <ul class="interests">
+    <li>Music neuroscience; neural representation of pitch and melody</li>
+    <li>EEG decoding &amp; brain&ndash;computer interfaces (BCI)</li>
+    <li>Music imagery and production</li>
+    <li>Open, reproducible neuroscience</li>
+  </ul>
 
   <div class="updated">Last updated: June 2026</div>
 </body>
